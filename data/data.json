@@ -1,0 +1,34 @@
+[
+    {
+        "type": "word",
+        "l-eng": [
+            "hello",
+            "hi"
+        ],
+        "l-turk": [
+            "merhaba"
+        ]
+    },
+    {
+        "type": "phrase",
+        "l-eng": [
+            "good night",
+            "goodnight"
+        ],
+        "l-turk": [
+            "iyi geceler"
+        ]
+    },
+    {
+        "type": "sentence",
+        "l-eng": [
+            "i'm fine, how are you?",
+            "i am fine, how are you?",
+            "i'm good, how are you?",
+            "i am good, how are you?"
+        ],
+        "l-turk": [
+            "iyiyim, nasilsin?"
+        ]
+    }
+]
