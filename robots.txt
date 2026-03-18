@@ -1,0 +1,13 @@
+User-agent: *
+Disallow: /.git/
+Disallow: /.vscode/
+Disallow: /data/
+Disallow: /favicon/
+Disallow: /images/
+Disallow: /scripts/
+Disallow: /style/
+Disallow: /*.md
+Disallow: /.gitconfig
+Disallow: /.gitignore
+Disallow: /LICENSE
+Disallow: /*.html

@@ -1,15 +1,24 @@
-# LANGUAGE LEARN
+# Turkish language exercises
 
-Una copia brutta di Duolingo per esercitarmi con il turco.
+Mostly vibe-coded, this project is a cheap copy of Duolingo exercises to help me practice Turkish.
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+
+## TODO
+
++ increase dataset size
++ exercise type: given a word form the plural
++ exercise type: true/false about translation
++ exercise type: true/false about plural
+
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ## Author
 
 Marco Plaitano
 
-- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ## License
 
-Distributed under the [MIT](LICENSE) license.
+The code is licensed under the [MIT License](LICENSE).
