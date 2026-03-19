@@ -2,7 +2,7 @@
 
 This project is a cheap copy of Duolingo-type exercises to help me practice Turkish.
 
-The website is free and available at: https://marcoyum.netlify.app
+The website is free and available at: https://turkingo.netlify.app
 
 **Disclaimer**  
 It all started with a vibe-coding mindset, now shifting towards actual commitment.

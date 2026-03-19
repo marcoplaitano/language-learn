@@ -85,7 +85,6 @@ body {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  align-items: center;
   min-height: 100vh;
 }
 
@@ -114,9 +113,49 @@ h6 {
   margin: 2.4rem 0 0.8rem;
 }
 
+.app {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 main hr {
   margin: 3.2rem 0;
   border-color: var(--color-hr);
+}
+
+
+/* ***** HEADER ***** */
+header#banner {
+  display: flex;
+  justify-content: space-between;
+  margin: 2rem 0 4rem;
+}
+header#banner h1 {
+  font-size: 1.4em;
+  margin: 0;
+}
+header#banner h1 a {
+  color: var(--color-text);
+}
+header#banner nav {
+  display: flex;
+  align-items: center;
+}
+header#banner nav a {
+  color: var(--color-text2);
+  text-decoration: underline;
+  text-decoration-color: var(--color-text2-underline);
+  text-decoration-thickness: 1px;
+  margin: 0;
+}
+header#banner nav a:not(:last-of-type) {
+  margin-right: 1.6rem;
+}
+header#banner nav a#navbar-curr-page {
+  text-decoration: none;
+  cursor: default;
 }
 
 
@@ -133,7 +172,7 @@ a:active:not(#navbar-curr-page) {
 }
 
 /* Mark external links. */
-main a[href^="http"]:not([href*="marcoyum.netlify.app"]):not(#random-post-link)::after {
+main a[href^="http"]:not([href*="turkingo.netlify.app"]):not(#random-post-link)::after {
   content:"↗"/" (external)";
   font-size: .9em;
   white-space: pre;
@@ -149,6 +188,13 @@ a:focus::after {
   text-decoration-thickness: 1px;
 }
 a:visited {
+  text-decoration: none;
+}
+header#banner h1 a:hover,
+header#banner h1 a:focus {
+  text-decoration: none;
+}
+header#banner h1 a:visited {
   text-decoration: none;
 }
 main p a,
@@ -323,9 +369,19 @@ footer a {
   body {
     width: 750px;
   }
+  header#banner {
+    line-height: 1;
+  }
 }
 
 /* ***** MOBILE VERSION ***** */
+@media screen and (max-width:600px) {
+  header#banner {
+    margin: 2rem 0 2.8rem;
+    display: block;
+  }
+}
+
 @media screen and (max-width:500px) {
   body {
     height: 100%;
