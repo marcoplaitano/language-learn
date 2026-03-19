@@ -41,29 +41,37 @@ function translation() {
     const correct = toTurkish ? item["l-turk"] : item["l-eng"];
     document.getElementById("question").textContent = question;
 
+    const btn = document.createElement("button");
+    btn.textContent = "Check";
+    btn.disabled = true;
+    btn.onclick = checkResult;
+
     const input = document.createElement("input");
     input.placeholder = "Type...";
 
-    input.addEventListener("keydown", e => { if (e.key === "Enter") checkResult(); });
+    input.addEventListener("keydown", e => {
+        if (e.key === "Enter")
+            checkResult();
+    });
+    input.addEventListener("input", () => {
+        btn.disabled = input.value.trim() === "";
+    });
     document.getElementById("answers").appendChild(input);
-    input.focus();
-
-    const btn = document.createElement("button");
-    btn.textContent = "Check";
-    btn.onclick = checkResult;
     document.getElementById("answers").appendChild(btn);
+    input.focus();
 
     function checkResult() {
         const inputText = input.value.trim().toLowerCase();
+        if (inputText === "") return;
         const feedback = document.getElementById("feedback");
         if (inputText == correct) {
             feedback.textContent = "✅ Correct!";
         } else {
-            feedback.textContent = "❌ Correct answer: " + correct;
+            feedback.textContent = "❌ " + correct;
         }
         btn.remove();
         input.disabled = true;
-        addNextButton();
+        addNextButton(true);
     }
 }
 
@@ -190,10 +198,7 @@ function matching() {
         }
 
         if (correctCount === sample.length) {
-            document.getElementById("feedback").textContent = "🎉 Perfect!";
             addNextButton();
-        } else {
-            document.getElementById("feedback").textContent = "";
         }
     }
 
@@ -338,15 +343,17 @@ function highlightDifferences(correct, user) {
     return html;
 }
 
-function addNextButton() {
+function addNextButton(isTranslation=false) {
     const btn = document.createElement("button");
     btn.textContent = "Next";
     btn.className = "next";
     btn.onclick = nextExercise;
     document.getElementById("answers").appendChild(btn);
-    setTimeout(() => {
-        btn.focus();
-    }, 0);
+    if (!isTranslation) {
+        setTimeout(() => {
+            btn.focus();
+        }, 0);
+    }
 }
 
 
