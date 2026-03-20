@@ -48,19 +48,18 @@ main button:disabled:hover {
 
 button.guess.correct {
   background: var(--color-green) !important;
-  opacity: 0.82;
+  opacity: 0.8;
 }
 
 button.guess.wrong {
   background: var(--color-red) !important;
-  opacity: 0.82;
+  opacity: 0.8;
 }
 
 
 /* ***** NEXT BUTTON ***** */
 .next {
   background: var(--color-accent);
-  color: white;
   margin-bottom: 2.4rem;
 }
 
@@ -70,22 +69,22 @@ button.guess.wrong {
 
 .next.correct {
   background: var(--color-green) !important;
-  color: white !important;
 }
 
 .next.wrong {
   background: var(--color-red) !important;
-  color: white !important;
 }
 
 
 /* ***** MATCH PAIRS BUTTON ***** */
 .match-btn.correct {
   background: var(--color-green) !important;
+  opacity: 0.8;
 }
 
 .match-btn.wrong {
   background: var(--color-red) !important;
+  opacity: 0.8;
 }
 
 .selected {
