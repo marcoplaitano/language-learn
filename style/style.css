@@ -90,6 +90,13 @@ body {
   flex-direction: column;
   min-height: 100vh;
 }
+/* ***** BACKGROUND GRADIENT COLOR ***** */
+/* body {
+  min-height: 100vh;
+  min-height: -webkit-fill-available;
+  min-height: 100dvh;
+  background: linear-gradient(135deg, var(--color-background) 0%, var(--color-red) 500%);
+} */
 
 h1 { font-size: 1.64em; }
 h2 { font-size: 1.4em; }
@@ -309,7 +316,7 @@ footer a {
     width: 750px;
   }
   header#banner {
-    line-height: 1;
+    line-height: 1.4;
   }
 }
 

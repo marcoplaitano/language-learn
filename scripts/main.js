@@ -29,7 +29,6 @@ function translation() {
     });
     document.getElementById("answers").appendChild(input);
     document.getElementById("answers").appendChild(checkBtn);
-    input.focus();
 
     function checkResult() {
         const inputText = input.value.trim().toLowerCase();
@@ -61,9 +60,6 @@ function translation() {
             document.getElementById("feedback").textContent = correct;
         }
         document.getElementById("answers").appendChild(nextBtn);
-        setTimeout(() => {
-            nextBtn.focus();
-        }, 200);
     }
 }
 
@@ -344,9 +340,6 @@ function addNextButton() {
     btn.className = "next";
     btn.onclick = nextExercise;
     document.getElementById("answers").appendChild(btn);
-    setTimeout(() => {
-        btn.focus();
-    }, 0);
 }
 
 function normalizeTurkish(str) {

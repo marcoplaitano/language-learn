@@ -18,6 +18,7 @@ The website is available at https://turkingo.netlify.app.
 ### Exercises
 
 + normalize turkish special characters for all exercises
++ new exercise type: rearrange word order to form sentence
 + new exercise type: given a word form the plural
 + new exercise type: true/false about translation
 + new exercise type: true/false about plural
