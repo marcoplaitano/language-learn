@@ -54,7 +54,6 @@ input:focus {
 main button {
   font-size: inherit;
   display: block;
-  width: 100%;
   margin: 0.2rem 0 1rem;
   padding: 12px;
   border: none;
@@ -72,23 +71,40 @@ main button:disabled:hover {
     filter: none;
 }
 
-button.guess.correct {
+#answers > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+#answers {
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+
+/* ***** GUESS TRANSLATION BUTTONS ***** */
+.btn-guess {
+  width: 100%;
+}
+.btn-guess.correct {
   background: var(--color-green) !important;
   opacity: 0.8;
 }
-
-button.guess.wrong {
+.btn-guess.wrong {
   background: var(--color-red) !important;
   opacity: 0.8;
 }
 
 
-/* ***** NEXT BUTTON ***** */
+/* ***** NEXT/DELETE BUTTONS ***** */
 .app #buttons {
-  width: 100%;
+  width: 70%;
   margin-top: 2rem;
   display: flex;
   gap: 8px;
+}
+.app #buttons button {
+  width: 100%;
 }
 
 .btn-next.correct {
@@ -99,18 +115,16 @@ button.guess.wrong {
 }
 
 
-/* ***** MATCH PAIRS BUTTON ***** */
-#answers > div {
-  display: flex;
-  gap: 8px;
+/* ***** MATCH PAIRS BUTTONS ***** */
+.btn-match {
+  width: 100%;
 }
-
-.match-btn.correct {
+.btn-match.correct {
   background: var(--color-green) !important;
   opacity: 0.8;
 }
 
-.match-btn.wrong {
+.btn-match.wrong {
   background: var(--color-red) !important;
   opacity: 0.8;
 }

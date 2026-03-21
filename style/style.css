@@ -136,6 +136,7 @@ header#banner {
   margin: 2rem 0 4rem;
 }
 header#banner h1 {
+  display: inline-block;
   font-size: 1.4em;
   margin: 0;
   background: linear-gradient(to right, var(--color-accent), var(--color-red));
