@@ -3,15 +3,13 @@
 This site is my scrappy, no-subscription alternative to Duolingo for English–Turkish language exercises.  
 I built it because I wanted to practice more without paying for Premium.
 
-It started as a vibe-coding experiment... and now it’s turning into something I actually care about.
-
 The website is available at https://turkingo.netlify.app.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
 ## Input data
 
-Asked a LLM model to give some examples and collect them in a JSON format for easy indexing.
+Asked a LLM model to give some examples that I then collected in JSON format for easy indexing.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -30,7 +28,7 @@ Asked a LLM model to give some examples and collect them in a JSON format for ea
 ### Input data
 
 + increase dataset size
-+ normalize some sentences (i.e. _su içiyorum_ -> _su içerim_)
++ categorize by topic/difficulty
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
