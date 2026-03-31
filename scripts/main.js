@@ -1,222 +1,281 @@
+class ExerciseData {
+    constructor(data) {
+        this.data = data;
+        this.langEN = data["l-eng"];
+        this.langTR = data["l-turk"];
+        this.type = data["type"];
+    }
+
+    getLanguageTR() {
+        return this.langTR;
+    }
+
+    getLanguageEN() {
+        return this.langEN;
+    }
+
+    getType() {
+        return this.type;
+    }
+
+    getTranslation(lang) {
+        return lang === this.langEN ? this.langTR : this.langEN;
+    }
+}
+
+
+
 //////////////////////////////////////////////////
 // 1. TRANSLATION
 //////////////////////////////////////////////////
 
-function translation() {
-    document.getElementById("title").textContent = "Translate";
+class ExerciseTranslation {
+    constructor() {
+        this.data = new ExerciseData(randomItem());
+        this.question = Math.random() > 0.5 ? this.data.getLanguageEN() : this.data.getLanguageTR();
+        this.answer = this.data.getTranslation(this.question).trim().toLowerCase();
+        console.log("ANSWER:", this.answer);
+    }
 
-    const item = randomItem();
-    const toTurkish = Math.random() > 0.5;
+    do() {
+        this.checkBtn = document.createElement("button");
+        this.input = document.createElement("input");
+        document.getElementById("title").textContent = "Translate";
+        document.getElementById("question").textContent = this.question;
 
-    const question = toTurkish ? item["l-eng"] : item["l-turk"];
-    ANSWER = toTurkish ? item["l-turk"] : item["l-eng"];
-    document.getElementById("question").textContent = question;
+        this.checkBtn.textContent = "Check";
+        this.checkBtn.classList.add("btn-check");
+        this.checkBtn.disabled = true;
+        this.checkBtn.onclick = () => this.checkResult(this.input.value.trim().toLowerCase(), this.answer);
 
-    const checkBtn = document.createElement("button");
-    checkBtn.textContent = "Check";
-    checkBtn.classList.add("btn-check");
-    checkBtn.disabled = true;
-    checkBtn.onclick = checkResult;
+        this.input.placeholder = "Type...";
 
-    const input = document.createElement("input");
-    input.placeholder = "Type...";
+        this.input.addEventListener("keydown", e => {
+            if (e.key === "Enter")
+                this.checkResult(this.input.value.trim().toLowerCase(), this.answer);
+        });
+        this.input.addEventListener("input", () => {
+            this.checkBtn.disabled = this.input.value.trim() === "";
+        });
+        document.getElementById("answers").appendChild(this.input);
+        document.getElementById("buttons").appendChild(this.checkBtn);
+    }
 
-    input.addEventListener("keydown", e => {
-        if (e.key === "Enter")
-            checkResult();
-    });
-    input.addEventListener("input", () => {
-        checkBtn.disabled = input.value.trim() === "";
-    });
-    document.getElementById("answers").appendChild(input);
-    document.getElementById("buttons").appendChild(checkBtn);
+    checkResult(input, answer) {
+        if (input === "") return;
 
-    function checkResult() {
-        const inputText = input.value.trim().toLowerCase();
-        if (inputText === "") return;
+        this.checkBtn.remove();
+        this.input.disabled = true;
 
-        checkBtn.remove();
-        input.disabled = true;
-
-        const normalizedInput = normalizeTurkish(inputText);
-        const normalizedAnswer = normalizeTurkish(ANSWER);
+        const normalizedInput = normalizeTurkish(input);
+        const normalizedAnswer = normalizeTurkish(answer);
         const distance = levenshtein(normalizedInput, normalizedAnswer);
         const isCorrect = distance === 0;
         const hasMinorTypo = distance > 0 && distance <= 1;
 
-        if (inputText !== ANSWER)
-            document.getElementById("feedback").textContent = ANSWER;
+        if (input !== answer) {
+            document.getElementById("feedback").textContent = answer;
+        }
+        if (!(isCorrect || hasMinorTypo))
+            saveMistake(this);
         addNextButton(isCorrect || hasMinorTypo);
     }
 }
+
 
 //////////////////////////////////////////////////
 // 2. TRANSLATION WITH GUESSES
 //////////////////////////////////////////////////
 
-function translation_with_guesses() {
-    document.getElementById("title").textContent = "Match the translation";
+class ExerciseTranslationWithGuesses {
+    constructor() {
+        const item = randomItem();
+        this.data = new ExerciseData(item);
+        this.toTurkish = Math.random() > 0.5;
+        this.question = this.toTurkish ? this.data.getLanguageEN() : this.data.getLanguageTR();
+        this.answer = this.data.getTranslation(this.question);
+        console.log("ANSWER:", this.answer);
+        this.wrongGuesses = shuffle(INPUT_DATA)
+            .filter(i => i.type !== "sentence")
+            .filter(i => i !== item)
+            .slice(0, 3)
+            .map(i => this.toTurkish ? i["l-turk"] : i["l-eng"]);
+        this.correctOption = null;
+    }
 
-    const item = randomWordOrPhrase();
-    const toTurkish = Math.random() > 0.5;
+    do() {
+        this.checkBtn = document.createElement("button");
+        this.input = document.createElement("input");
+        document.getElementById("title").textContent = "Match the translation";
 
-    const question = toTurkish ? item["l-eng"] : item["l-turk"];
-    ANSWER = toTurkish ? item["l-turk"] : item["l-eng"];
+        const options = shuffle([this.answer, ...this.wrongGuesses]);
 
-    const wrong = shuffle(INPUT_DATA)
-        .filter(i => i.type !== "sentence")
-        .filter(i => i !== item)
-        .slice(0, 3)
-        .map(i => toTurkish ? i["l-turk"] : i["l-eng"]);
+        document.getElementById("question").textContent = this.question;
 
-    const options = shuffle([ANSWER, ...wrong]);
+        const container = document.createElement("div");
+        container.style.cssText = "display:flex;justify-content:space-between";
 
-    document.getElementById("question").textContent = question;
+        const leftCol = this.makeColumn(options.slice(0, 2));
+        const rightCol = this.makeColumn(options.slice(2));
+        container.append(leftCol, rightCol);
 
-    const container = document.createElement("div");
-    container.style.cssText = "display:flex;justify-content:space-between";
-    // container.style.cssText = "display:grid;grid-template-columns:1fr 1fr;gap:10px;";
+        document.getElementById("answers").appendChild(container);
+    }
 
-    const makeColumn = (words) => {
+    makeColumn(words) {
         const col = document.createElement("div");
         words.forEach(word => {
             const btn = document.createElement("button");
             btn.classList.add("btn-guess");
             btn.textContent = word;
-            if (word === ANSWER)
-                correctOption = btn;
-            btn.onclick = () => showResult(btn, word === ANSWER);
+            if (word === this.answer)
+                this.correctOption = btn;
+            btn.onclick = () => this.showResult(btn, word === this.answer);
             btn.addEventListener("keydown", e => {
-                if (e.key === "Enter") showResult(btn, word === ANSWER);
+                if (e.key === "Enter") this.showResult(btn, word === this.answer);
             });
             col.appendChild(btn);
         });
         return col;
-    };
+    }
 
-    const leftCol = makeColumn(options.slice(0, 2));
-    const rightCol = makeColumn(options.slice(2));
-    container.append(leftCol, rightCol);
-
-    document.getElementById("answers").appendChild(container);
-
-    function showResult(element, isCorrect) {
+    showResult(element, isCorrect) {
         if (isCorrect) {
             element.classList.add("correct");
         } else {
             element.classList.add("wrong");
-            correctOption.classList.add("correct");
+            this.correctOption.classList.add("correct");
+            saveMistake(this);
         }
         document.querySelectorAll(".btn-guess").forEach(b => b.disabled = true);
         addNextButton();
     }
 }
 
+
 //////////////////////////////////////////////////
 // 3. MATCHING
 //////////////////////////////////////////////////
 
-function matching() {
-    document.getElementById("title").textContent = "Match the pairs";
-    const answersDiv = document.getElementById("answers");
-
-    const sample = shuffle([...INPUT_DATA])
-        .filter(i => i.type !== "sentence")
-        .slice(0, 4);
-    const leftWords = sample.map(i => i["l-turk"]);
-    const rightWords = shuffle(sample.map(i => i["l-eng"]));
-
-    let selected = null; // { word, side }
-    const pairs = {};
-
-    const container = document.createElement("div");
-    container.style.cssText = "display:flex;justify-content:space-between";
-
-    const makeColumn = (words, side) => {
-        const col = document.createElement("div");
-        col.classList.add("match-col");
-
-        words.forEach(word => {
-            const btn = document.createElement("button");
-            btn.textContent = word;
-            btn.className = "btn-match";
-
-            btn.onclick = () => handleClick(word, side, btn, col);
-
-            col.appendChild(btn);
-        });
-
-        return col;
-    };
-
-    const leftCol = makeColumn(leftWords, "left");
-    const rightCol = makeColumn(rightWords, "right");
-
-    function handleClick(word, side, btn, col) {
-        if (!selected || selected.side === side) {
-            selected = { word, side };
-            highlightSelection(btn, col);
-            return;
-        }
-
-        // match
-        const [left, right] = side === "left"
-            ? [word, selected.word]
-            : [selected.word, word];
-
-        // remove previous conflicting matches
-        Object.keys(pairs).forEach(k => {
-            if (pairs[k] === right) delete pairs[k];
-        });
-
-        pairs[left] = right;
-
-        selected = null;
-        updateUI();
+class ExerciseMatching {
+    constructor() {
+        const item = randomItem();
+        this.data = new ExerciseData(item);
+        this.toTurkish = Math.random() > 0.5;
+        this.question = this.toTurkish ? this.data.getLanguageEN() : this.data.getLanguageTR();
+        this.answer = this.data.getTranslation(this.question);
+        console.log("ANSWER:", this.answer);
+        this.wrongGuesses = shuffle(INPUT_DATA)
+            .filter(i => i.type !== "sentence")
+            .filter(i => i !== item)
+            .slice(0, 3)
+            .map(i => this.toTurkish ? i["l-turk"] : i["l-eng"]);
+        this.correctOption = null;
     }
 
-    function updateUI() {
-        [leftCol, rightCol].forEach(col =>
-            col.querySelectorAll("button")
-                .forEach(b => b.classList.remove("correct", "wrong"))
-        );
+    do() {
+        document.getElementById("title").textContent = "Match the pairs";
+        const answersDiv = document.getElementById("answers");
 
-        let correctCount = 0;
+        const sample = shuffle([...INPUT_DATA])
+            .filter(i => i.type !== "sentence")
+            .slice(0, 4);
+        const leftWords = sample.map(i => i["l-turk"]);
+        const rightWords = shuffle(sample.map(i => i["l-eng"]));
 
-        for (const [turk, eng] of Object.entries(pairs)) {
-            const correct = sample.find(i => i["l-turk"] === turk)["l-eng"];
+        let selected = null; // { word, side }
+        const pairs = {};
 
-            const leftBtn = [...leftCol.children].find(b => b.textContent === turk);
-            const rightBtn = [...rightCol.children].find(b => b.textContent === eng);
+        const container = document.createElement("div");
+        container.style.cssText = "display:flex;justify-content:space-between";
 
-            const isCorrect = eng === correct;
+        const makeColumn = (words, side) => {
+            const col = document.createElement("div");
+            col.classList.add("match-col");
 
-            leftBtn.classList.add(isCorrect ? "correct" : "wrong");
-            rightBtn.classList.add(isCorrect ? "correct" : "wrong");
-            container.querySelectorAll("button").forEach(btn => {
-                btn.classList.remove("selected");
-                setTimeout(() => btn.blur(), 0);
+            words.forEach(word => {
+                const btn = document.createElement("button");
+                btn.textContent = word;
+                btn.className = "btn-match";
+
+                btn.onclick = () => handleClick(word, side, btn, col);
+
+                col.appendChild(btn);
             });
 
-            if (isCorrect) {
-                leftBtn.disabled = true;
-                rightBtn.disabled = true;
-                correctCount++;
+            return col;
+        };
+
+        const leftCol = makeColumn(leftWords, "left");
+        const rightCol = makeColumn(rightWords, "right");
+
+        function handleClick(word, side, btn, col) {
+            if (!selected || selected.side === side) {
+                selected = { word, side };
+                highlightSelection(btn, col);
+                return;
             }
+
+            // match
+            const [left, right] = side === "left"
+                ? [word, selected.word]
+                : [selected.word, word];
+
+            // remove previous conflicting matches
+            Object.keys(pairs).forEach(k => {
+                if (pairs[k] === right) delete pairs[k];
+            });
+
+            pairs[left] = right;
+
+            selected = null;
+            updateUI();
         }
 
-        if (correctCount === sample.length)
-            addNextButton();
+        function updateUI() {
+            [leftCol, rightCol].forEach(col =>
+                col.querySelectorAll("button")
+                    .forEach(b => b.classList.remove("correct", "wrong"))
+            );
+
+            let correctCount = 0;
+
+            for (const [turk, eng] of Object.entries(pairs)) {
+                const correct = sample.find(i => i["l-turk"] === turk)["l-eng"];
+
+                const leftBtn = [...leftCol.children].find(b => b.textContent === turk);
+                const rightBtn = [...rightCol.children].find(b => b.textContent === eng);
+
+                const isCorrect = eng === correct;
+
+                leftBtn.classList.add(isCorrect ? "correct" : "wrong");
+                rightBtn.classList.add(isCorrect ? "correct" : "wrong");
+                container.querySelectorAll("button").forEach(btn => {
+                    btn.classList.remove("selected");
+                    setTimeout(() => btn.blur(), 0);
+                });
+
+                if (isCorrect) {
+                    leftBtn.disabled = true;
+                    rightBtn.disabled = true;
+                    correctCount++;
+                }
+            }
+
+            if (correctCount === sample.length)
+                addNextButton();
+        }
+
+        container.append(leftCol, rightCol);
+        answersDiv.appendChild(container);
     }
 
-    container.append(leftCol, rightCol);
-    answersDiv.appendChild(container);
+    highlightSelection(selectedBtn, container) {
+        container.querySelectorAll("button").forEach(btn => btn.classList.remove("selected"));
+        selectedBtn.classList.add("selected");
+    }
 }
 
-function highlightSelection(selectedBtn, container) {
-    container.querySelectorAll("button").forEach(btn => btn.classList.remove("selected"));
-    selectedBtn.classList.add("selected");
-}
 
 //////////////////////////////////////////////////
 // 4. FILL IN THE BLANK
@@ -524,15 +583,30 @@ function nextExercise() {
     clearButtonsDiv();
     skipEnable();
 
-    const types = [translation, translation_with_guesses, matching, fillBlanks, reorderSentence];
-    const randomExercise = types[Math.floor(Math.random() * types.length)];
-    randomExercise();
+    console.log("DONE:", numExercisesDone)
+    if (numExercisesDone > 0 && numExercisesDone % 3 === 0) {
+        if (failedExercises.length == 0) {
+            numExercisesDone = 0;
+            nextExercise();
+            return;
+        }
+        console.log("REPEATING EXERCISE");
+        repeatMistake();
+        return;
+    }
 
-    // translation();
-    // translation_with_guesses();
-    // matching();
-    // fillBlanks();
-    // reorderSentence();
+    const types = [ExerciseTranslation, ExerciseTranslationWithGuesses, ExerciseMatching];
+    const randomExercise = types[Math.floor(Math.random() * types.length)];
+    exercise = new randomExercise();
+    // exercise.do();
+
+    // exercise = new ExerciseTranslation(); exercise.do();
+    // exercise = new ExerciseTranslationWithGuesses(); exercise.do();
+    exercise = new ExerciseMatching(); exercise.do();
+    // exercise = new ExerciseFillBlanks(); exercise.do();
+    // exercise = new ExerciseReorderSentence(); exercise.do();
+
+    numExercisesDone++;
 }
 
 function skipExercise() {
@@ -548,9 +622,22 @@ function skipDisable() {
     document.getElementById("btn-skip").disabled = true;
 }
 
+function saveMistake(exercise) {
+    if (failedExercises.length < 10)
+        failedExercises.push(exercise);
+}
+
+function repeatMistake() {
+    exercise = failedExercises.at(0);
+    exercise.do();
+    failedExercises.shift();
+}
+
 
 let INPUT_DATA = [];
 let ANSWER = null;
+let numExercisesDone = 0;
+let failedExercises = [];
 
 async function init() {
     const res = await fetch("data/language_data.json");
