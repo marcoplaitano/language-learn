@@ -17,8 +17,8 @@ Asked a LLM model to give some examples that I then collected in JSON format for
 
 ### Website
 
-+ specific exercise page
-+ health bar with 20 hearts; after 20 mistakes user has to restart(?)
++ show answer when skipping exercise
++ keep track of mistakes. after 10 lessons review mistakes
 
 ### Exercises
 
