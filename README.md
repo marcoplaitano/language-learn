@@ -17,8 +17,11 @@ Asked a LLM model to give some examples that I then collected in JSON format for
 
 ### Website
 
-+ Show exercise/error bar  
-    Count 10 exercises. If 10 correct show "good job". If any mistake, revise it.
++ Show progress bar text with number of exercises
++ Ask user whether to revise mistakes or go to next lesson
++ Better end-of-lesson splash screen:  
+    - emoji of confetti or sad face
+    - number of mistakes
 
 ### Exercises
 

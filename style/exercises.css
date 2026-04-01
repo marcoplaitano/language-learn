@@ -161,6 +161,31 @@ main button:disabled:hover {
 }
 
 
+/* ***** PROGRESS BAR ***** */
+#footer-content {
+  width: 100%;
+  display: flex;
+}
+
+#progress-bar-container {
+  width: 60%;
+  max-width: 400px;
+  background-color: var(--color-skip-btn-bg);
+  border-radius: 10px;
+  margin-top: auto;
+  margin-bottom: auto;
+  height: 2rem;
+  overflow: hidden;
+}
+
+#progress-bar {
+  width: 0%; /* Starting point */
+  height: 100%;
+  background-color: var(--color-skip-btn-fg);
+  transition: 0.1s;
+}
+
+
 /* ***** SKIP BUTTON ***** */
 #btn-skip {
   font-size: 2.4rem;

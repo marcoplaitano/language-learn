@@ -534,7 +534,7 @@ class ExerciseReorderSentence {
 
 
 //////////////////////////////////////////////////
-// UTILITY FUNCTIONS
+// UI FUNCTIONS
 //////////////////////////////////////////////////
 
 function addNextButton(correct=null) {
@@ -556,6 +556,29 @@ function addNextButton(correct=null) {
     skipDisable();
 }
 
+function updateProgressBar() {
+  const bar = document.getElementById("progress-bar");
+  bar.style.width = ((numExercisesDone / NUM_EXERCISES_BEFORE_REVIEW) * 100) + "%";
+}
+
+function clearButtonsDiv() {
+    const buttonsDiv = document.getElementById("buttons");
+    const buttons = buttonsDiv.querySelectorAll("button");
+    buttons.forEach(btn => btn.remove());
+}
+
+function showEndLessonScreen() {
+    document.getElementById("title").textContent = "Lesson Completed!";
+    document.getElementById("question").textContent = "You completed the lesson! You can start again now";
+    document.getElementById("footer-content").style.display = "none";
+    addNextButton();
+}
+
+
+//////////////////////////////////////////////////
+// UTILITY FUNCTIONS
+//////////////////////////////////////////////////
+
 function randomItem() {
     return INPUT_DATA[Math.floor(Math.random() * INPUT_DATA.length)];
 }
@@ -572,12 +595,6 @@ function randomSentence() {
 
 function shuffle(arr) {
     return arr.sort(() => Math.random() - 0.5);
-}
-
-function clearButtonsDiv() {
-    const buttonsDiv = document.getElementById("buttons");
-    const buttons = buttonsDiv.querySelectorAll("button");
-    buttons.forEach(btn => btn.remove());
 }
 
 function normalizeTurkish(str) {
@@ -598,22 +615,22 @@ function levenshtein(a, b) {
     return matrix[b.length][a.length];
 }
 
-function highlightDifferences(correct, user) {
-    const len = Math.max(correct.length, user.length);
-    let html = "";
-    for (let i = 0; i < len; i++) {
-        const c = correct[i] || "";
-        const u = user[i] || "";
-        if (normalizeTurkish(c) === normalizeTurkish(u)) html += c;
-        else html += `<span style="color:red;">${u || "_"}</span>`;
-    }
-    return html;
-}
-
 
 //////////////////////////////////////////////////
 // MAIN FLOW
 //////////////////////////////////////////////////
+
+function startLesson() {
+    numExercisesDone = 0;
+    numFailedExercises = 0;
+    failedExercises = [];
+    nextExercise();
+}
+
+function endLesson() {
+    numExercisesDone = 0;
+    showEndLessonScreen();
+}
 
 function nextExercise() {
     document.getElementById("question").innerHTML = "";
@@ -622,20 +639,23 @@ function nextExercise() {
     document.getElementById("hint").style.fontWeight = "normal";
     document.getElementById("answers").innerHTML = "";
     document.getElementById("feedback").textContent = "";
+    document.getElementById("footer-content").style.display = "";
     clearButtonsDiv();
     skipEnable();
+    updateProgressBar();
 
     if (numExercisesDone > 0 && numExercisesDone % NUM_EXERCISES_BEFORE_REVIEW === 0) {
+        if (numFailedExercises === 0)
+            numFailedExercises = failedExercises.length;
         if (failedExercises.length == 0) {
-            numExercisesDone = 0;
-            nextExercise();
+            endLesson();
             return;
         }
         repeatMistake();
         return;
     }
 
-    const types = [ExerciseTranslation, ExerciseTranslationWithGuesses, ExerciseMatching];
+    const types = [ExerciseTranslation, ExerciseTranslationWithGuesses, ExerciseMatching, ExerciseFillBlanks, ExerciseReorderSentence];
     const randomExercise = types[Math.floor(Math.random() * types.length)];
     EXERCISE = new randomExercise();
     EXERCISE.do();
@@ -675,17 +695,19 @@ function repeatMistake() {
 }
 
 
+const NUM_EXERCISES_BEFORE_REVIEW = 1;
+const MAX_FAILED_EXERCISES = 10;
 let INPUT_DATA = [];
 let EXERCISE = null;
+
 let numExercisesDone = 0;
-const NUM_EXERCISES_BEFORE_REVIEW = 10;
-const MAX_FAILED_EXERCISES = 10;
 let failedExercises = [];
+let numFailedExercises = 0;
 
 async function init() {
     const res = await fetch("data/language_data.json");
     INPUT_DATA = await res.json();
-    nextExercise();
+    startLesson();
 }
 
 init();
