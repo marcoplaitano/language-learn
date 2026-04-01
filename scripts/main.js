@@ -558,7 +558,7 @@ function addNextButton(correct=null) {
 
 function updateProgressBar() {
   const bar = document.getElementById("progress-bar");
-  bar.style.width = ((numExercisesDone / NUM_EXERCISES_BEFORE_REVIEW) * 100) + "%";
+  bar.style.width = ((numExercisesDone / NUM_EXERCISES_PER_LESSON) * 100) + "%";
 }
 
 function clearButtonsDiv() {
@@ -644,7 +644,7 @@ function nextExercise() {
     skipEnable();
     updateProgressBar();
 
-    if (numExercisesDone > 0 && numExercisesDone % NUM_EXERCISES_BEFORE_REVIEW === 0) {
+    if (numExercisesDone > 0 && numExercisesDone % NUM_EXERCISES_PER_LESSON === 0) {
         if (numFailedExercises === 0)
             numFailedExercises = failedExercises.length;
         if (failedExercises.length == 0) {
@@ -695,7 +695,7 @@ function repeatMistake() {
 }
 
 
-const NUM_EXERCISES_BEFORE_REVIEW = 1;
+const NUM_EXERCISES_PER_LESSON = 10;
 const MAX_FAILED_EXERCISES = 10;
 let INPUT_DATA = [];
 let EXERCISE = null;
