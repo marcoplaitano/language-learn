@@ -17,7 +17,6 @@ Asked a LLM model to give some examples that I then collected in JSON format for
 
 ### Website
 
-+ Show progress bar text with number of exercises
 + Ask user whether to revise mistakes or go to next lesson
 + Better end-of-lesson splash screen:  
     - emoji of confetti or sad face

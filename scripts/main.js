@@ -108,6 +108,7 @@ class ExerciseTranslationWithGuesses {
 
     showAnswer() {
         this.correctOption.classList.add("correct");
+        document.querySelectorAll(".btn-guess").forEach(b => b.disabled = true);
     }
 
     do() {
@@ -559,6 +560,8 @@ function addNextButton(correct=null) {
 function updateProgressBar() {
   const bar = document.getElementById("progress-bar");
   bar.style.width = ((numExercisesDone / NUM_EXERCISES_PER_LESSON) * 100) + "%";
+  const label = document.getElementById("progress-label");
+  label.textContent = numExercisesDone + "/" + NUM_EXERCISES_PER_LESSON;
 }
 
 function clearButtonsDiv() {
@@ -570,7 +573,7 @@ function clearButtonsDiv() {
 function showEndLessonScreen() {
     document.getElementById("title").textContent = "Lesson Completed!";
     document.getElementById("question").textContent = "You completed the lesson! You can start again now";
-    document.getElementById("footer-content").style.display = "none";
+    document.getElementById("progress-main-container").style.display = "none";
     addNextButton();
 }
 
@@ -639,7 +642,7 @@ function nextExercise() {
     document.getElementById("hint").style.fontWeight = "normal";
     document.getElementById("answers").innerHTML = "";
     document.getElementById("feedback").textContent = "";
-    document.getElementById("footer-content").style.display = "";
+    document.getElementById("progress-main-container").style.display = "";
     clearButtonsDiv();
     skipEnable();
     updateProgressBar();
@@ -705,6 +708,8 @@ let failedExercises = [];
 let numFailedExercises = 0;
 
 async function init() {
+    const label = document.getElementById("progress-label");
+    label.textContent = 0 + "/" + NUM_EXERCISES_PER_LESSON;
     const res = await fetch("data/language_data.json");
     INPUT_DATA = await res.json();
     startLesson();

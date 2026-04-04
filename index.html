@@ -48,12 +48,19 @@
   </main>
 
   <footer>
-    <div id="footer-content">
-      <div id="progress-bar-container">
-        <div id="progress-bar"></div>
+    <div id="progress-main-container">
+      <div id="progress-and-skip-container">
+        <div id="progress-container">
+          <div id="progress-bar-container">
+            <div id="progress-bar"></div>
+          </div>
+          <span id="progress-label"></span>
+        </div>
+
+        <button id="btn-skip" aria-label="Skip exercise" title="Skip exercise" onclick="skipExercise()">»</button>
       </div>
-      <button id="btn-skip" aria-label="Skip exercise" title="Skip exercise" onclick="skipExercise()">»</button>
     </div>
+
     <hr>
     <p><span translate="no">© 2026 Marco Plaitano</span></p>
   </footer>
