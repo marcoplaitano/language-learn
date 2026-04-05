@@ -41,6 +41,21 @@ function levenshtein(a, b) {
     return matrix[b.length][a.length];
 }
 
+function getEndMessage(mistakes, skips, total) {
+    const ratioMistake = mistakes / total;
+    const ratioSkip = skips / total;
+    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
+
+    if (ratioSkip >= 0.5) return pick(END_LESSON_MESSAGES.skipped_most);
+    if (ratioSkip >= 0.2) return pick(END_LESSON_MESSAGES.skipped_some);
+    if (ratioMistake === 0)  return pick(END_LESSON_MESSAGES.perfect);
+    if (ratioMistake <= 0.1) return pick(END_LESSON_MESSAGES.excellent);
+    if (ratioMistake <= 0.3) return pick(END_LESSON_MESSAGES.great);
+    if (ratioMistake <= 0.5) return pick(END_LESSON_MESSAGES.okay);
+    if (ratioMistake <= 0.7) return pick(END_LESSON_MESSAGES.poor);
+    else return pick(END_LESSON_MESSAGES.terrible);
+}
+
 
 class ExerciseData {
     constructor(data) {
@@ -632,8 +647,11 @@ function updateProgressBar() {
     const label = document.getElementById("progress-label");
     label.textContent = numExercisesDone + "/" + NUM_EXERCISES_PER_LESSON;
 
-    if (THIS_RESULT === null)
+    if (THIS_RESULT === null) {
+        const progressBarSegments = document.querySelectorAll(".progress-bar-segment");
+        progressBarSegments.forEach(seg => seg.remove());
         return;
+    }
 
     const bar = document.getElementById("progress-bar");
     const color = THIS_RESULT === ExerciseResult.CORRECT ? "var(--color-green)" : THIS_RESULT === ExerciseResult.FAILED ? "var(--color-red)" : "var(--color-text2)";
@@ -654,10 +672,7 @@ function clearButtonsDiv() {
 
 async function showEndLessonScreen() {
     document.getElementById("title").textContent = "Lesson Completed!";
-    document.getElementById("question").textContent = "You completed the lesson! You can start again now";
-    document.getElementById("bottom-menu-container").style.display = "none";
-    const progressBarSegments = document.querySelectorAll(".progress-bar-segment");
-    progressBarSegments.forEach(seg => seg.remove());
+    document.getElementById("question").textContent = getEndMessage(numExercisesFailed, numExercisesSkipped, NUM_EXERCISES_PER_LESSON);
     return new Promise((resolve) => {
         addNextButton(resolve);
     });
@@ -671,19 +686,21 @@ async function showEndLessonScreen() {
 async function startLesson() {
     THIS_RESULT = null;
     numExercisesDone = 0;
-    numFailedExercises = 0;
+    numExercisesFailed = 0;
     failedExercises = [];
+    numExercisesSkipped = 0;
     updateProgressBar();
     await cycleExercises();
 }
 
 async function endLesson() {
+    await showEndLessonScreen();
     THIS_RESULT = null;
     numExercisesDone = 0;
-    numFailedExercises = 0;
+    numExercisesFailed = 0;
     failedExercises = [];
+    numExercisesSkipped = 0;
     updateProgressBar();
-    await showEndLessonScreen();
 }
 
 async function cycleExercises() {
@@ -730,6 +747,7 @@ async function skipExercise() {
         addNextButton(resolve);
     });
     numExercisesDone++;
+    numExercisesSkipped++;
     updateProgressBar();
     await cycleExercises();
 }
@@ -758,7 +776,7 @@ function saveResult(result) {
     THIS_RESULT = result;
     if (result === ExerciseResult.FAILED) {
         saveMistake(EXERCISE);
-        numFailedExercises++;
+        numExercisesFailed++;
     }
 }
 
@@ -767,18 +785,24 @@ const NUM_EXERCISES_PER_LESSON = 10;
 const MAX_FAILED_EXERCISES = NUM_EXERCISES_PER_LESSON;
 const PROGRESS_BAR_GAP = 3 * (NUM_EXERCISES_PER_LESSON - 1);
 let INPUT_DATA = [];
+let END_LESSON_MESSAGES = {};
 let EXERCISE = null;
 let THIS_RESULT = null;
 
 let numExercisesDone = 0;
 let failedExercises = [];
-let numFailedExercises = 0;
+let numExercisesFailed = 0;
+let numExercisesSkipped = 0;
 
 async function init() {
     const label = document.getElementById("progress-label");
     label.textContent = 0 + "/" + NUM_EXERCISES_PER_LESSON;
-    const res = await fetch("data/language_data.json");
-    INPUT_DATA = await res.json();
+    const [langRes, endMsgRes] = await Promise.all([
+        fetch("data/language_data.json"),
+        fetch("data/end_lesson_messages.json"),
+    ]);
+    INPUT_DATA = await langRes.json();
+    END_LESSON_MESSAGES = await endMsgRes.json();
     await startLesson();
 }
 

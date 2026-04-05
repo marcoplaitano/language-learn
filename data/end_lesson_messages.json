@@ -1,0 +1,70 @@
+{
+    "perfect": [
+        "Flawless! Are you sure you're not just a Turkish person pranking us? 🇹🇷",
+        "Zero mistakes. We're genuinely a little scared of you. 👁️",
+        "Perfect score! The words didn't stand a chance. 🏹",
+        "Mükemmel! (That means perfect — but you definitely knew that.) ✨",
+        "100%! At this point just move to Istanbul. 🕌",
+        "Zero mistakes! The dictionary is shaking. 📖",
+        "Perfect score! Turkey is basically your second home. 🇹🇷",
+        "100%! Your Turkish teacher would be in tears. 🥲"
+    ],
+    "excellent": [
+        "So close to flawless it hurts — in a good way! 🌟",
+        "Nearly spotless! One phrase put up a fight. 💫",
+        "Excellent! That one mistake is already forgotten. 🧹",
+        "One slip? Barely counts. You crushed it. 👊",
+        "Almost perfect! One phrase escaped. Hunt it down. 🎯",
+        "So close to flawless it's almost annoying. Almost. 🌟",
+        "One mistake! Probably a typo. We'll allow it. 🧹",
+        "Nearly spotless! That one phrase will regret crossing you. ⚔️",
+        "One slip? Barely counts. You're basically fluent. 💫"
+    ],
+    "great": [
+        "Solid work! The vocab is clearly sticking. 🧠",
+        "Great effort! A few words are still hiding from you. 🙈",
+        "You're building something real here. Keep going! 🏗️",
+        "More right than wrong — that's a win. 🎯",
+        "Good stuff! A bit more practice and those gaps will close. 🔒",
+        "Pretty good! A few words are still laughing at you though. 😄",
+        "Solid effort! The vocabulary is only slightly winning. 📊",
+        "Not bad! Some words respect you. Others remain unconvinced. 🤔",
+        "You're getting there! The finish line can see you, sort of. 🏃",
+        "Good job! Istanbul wasn't built in a day, and neither is this. 🏗️"
+    ],
+    "okay": [
+        "Half right! Technically, that's also half wrong. Just saying. 🥛",
+        "50%! A coin flip could have matched this. To be fair. 🪙",
+        "You can do better. Your future self is cringing slightly. 😬",
+        "The glass is half full! Of mistakes. But also answers. 🔄",
+        "Halfway there! The other half is where the actual words live. 📚"
+    ],
+    "poor": [
+        "Turkish: 7, You: 3. The language is starting to feel sorry for you. 😬",
+        "A few more mistakes and the words will start avoiding you. 🏃💨",
+        "Rough round! The vocabulary is openly gossiping about you now. 🗣️",
+        "You got some right! Just... not most of them. Details. 📉",
+        "The words fought back today. Embarrassingly, they won. ⚔️"
+    ],
+    "terrible": [
+        "Wow. Just... wow. The dictionary has filed a complaint. 📖",
+        "At this score, even the wrong answers are disappointed in you. 😔",
+        "Turkish is hard. What you just did was also hard, but differently. 💀",
+        "The vocabulary isn't angry. It's just very, very tired. 😮‍💨",
+        "This score is a cry for help and we hear you. We'll try again. 🆘"
+    ],
+    "skipped_some": [
+        "A few skips in there! The words noticed. 👀",
+        "Some exercises got away. They're relieved. 🏃💨",
+        "Skipping is a valid strategy. A cowardly one, but valid. 🐔",
+        "A couple of dodges! The vocabulary is writing your name down. 📝",
+        "You skipped a few. We won't tell. The words will though. 🗣️"
+    ],
+    "skipped_most": [
+        "Bold strategy: just skip half the lesson. Truly inspirational. 🎓",
+        "You skipped more than you answered. The lesson is questioning its purpose. 🪞",
+        "At this point you went for a walk with extra steps. 🚶",
+        "The exercises you skipped have formed a support group. 🤝",
+        "Skipping most of the lesson and still showing up for the score screen. Respect, kind of. 🫡"
+    ]
+}
