@@ -1,6 +1,3 @@
-
-
-
 //////////////////////////////////////////////////
 // UTILITY FUNCTIONS
 //////////////////////////////////////////////////
@@ -23,11 +20,13 @@ function shuffle(arr) {
     return arr.sort(() => Math.random() - 0.5);
 }
 
+// Substitute "strange" turkish alphabet letters with QWERTY ones.
 function normalizeTurkish(str) {
     const map = { "ç": "c", "Ç": "C", "ğ": "g", "Ğ": "G", "ı": "i", "İ": "i", "ö": "o", "Ö": "O", "ş": "s", "Ş": "S", "ü": "u", "Ü": "U" };
     return str.split("").map(c => map[c] || c).join("").toLowerCase();
 }
 
+// Calculate levenshtein distance between 2 words.
 function levenshtein(a, b) {
     const matrix = Array(b.length + 1).fill().map(() => Array(a.length + 1).fill(0));
     for (let i = 0; i <= a.length; i++) matrix[0][i] = i;
@@ -41,6 +40,7 @@ function levenshtein(a, b) {
     return matrix[b.length][a.length];
 }
 
+// Choose which end-of-lesson message to display based on number of failed and skipped exercises.
 function getEndMessage(mistakes, skips, total) {
     const ratioMistake = mistakes / total;
     const ratioSkip = skips / total;
@@ -77,12 +77,13 @@ class ExerciseData {
         return this.type;
     }
 
-    getTranslation(lang) {
-        return lang === this.langEN ? this.langTR : this.langEN;
+    getTranslation(phrase) {
+        return phrase === this.langEN ? this.langTR : this.langEN;
     }
 }
 
 
+// Just need this as an Enum.
 const ExerciseResult = {
     CORRECT: "correct",
     FAILED: "failed",
@@ -305,12 +306,10 @@ class ExerciseMatching {
             return;
         }
 
-        // match
         const [left, right] = side === "left"
             ? [word, this.selected.word]
             : [this.selected.word, word];
 
-        // remove previous conflicting matches
         Object.keys(this.pairs).forEach(k => {
             if (this.pairs[k] === right) delete this.pairs[k];
         });
@@ -380,7 +379,7 @@ class ExerciseFillBlanks {
         this.displaySentenceWords = [];
         this.blankStr = "______";
 
-        // Randomly select 1 or 2 words to blank out (but less than total words)
+        // Randomly select 1 or 2 words to blank out (but less than total words).
         while (this.blankIndices.length < this.numBlanks) {
             const idx = Math.floor(Math.random() * this.words.length);
             if (!this.blankIndices.includes(idx)) {
@@ -543,7 +542,6 @@ class ExerciseReorderSentence {
             this.hintParagraph.style.display = "";
             const buttonsDiv = document.getElementById("buttons");
 
-            // Show English translation
             document.getElementById("question").innerHTML = this.question;
 
             this.blanks = [];
@@ -636,9 +634,8 @@ function addNextButton(resolve) {
     else if (THIS_RESULT === ExerciseResult.FAILED)
         nextBtn.classList.add("wrong");
 
+    clearButtonsDiv();
     document.getElementById("buttons").appendChild(nextBtn);
-    document.querySelectorAll(".btn-delete").forEach(el => el.remove());
-    document.querySelectorAll(".btn-check").forEach(el => el.remove());
 
     skipDisable();
 }
@@ -673,24 +670,23 @@ function clearButtonsDiv() {
 async function showEndLessonScreen(offerRevise = false) {
     document.getElementById("title").textContent = "Lesson Completed!";
     document.getElementById("question").textContent = getEndMessage(numExercisesFailed, numExercisesSkipped, NUM_EXERCISES_PER_LESSON);
+    skipDisable();
+    // If function called with offerRevise=true then show 2 buttons to choose whether to revise mistakes or
+    // go to next lesson.
+    // Otherwise, only show the Next lesson button.
     return new Promise((resolve) => {
         if (offerRevise) {
             const reviseBtn = document.createElement("button");
             reviseBtn.textContent = "Revise mistakes";
             reviseBtn.className = "btn-next";
             reviseBtn.onclick = () => resolve("revise");
-
-            const nextLessonBtn = document.createElement("button");
-            nextLessonBtn.textContent = "Next lesson";
-            nextLessonBtn.className = "btn-next";
-            nextLessonBtn.onclick = () => resolve("next");
-
             document.getElementById("buttons").appendChild(reviseBtn);
-            document.getElementById("buttons").appendChild(nextLessonBtn);
-            skipDisable();
-        } else {
-            addNextButton(resolve);
         }
+        const nextLessonBtn = document.createElement("button");
+        nextLessonBtn.textContent = "Next lesson";
+        nextLessonBtn.className = "btn-next";
+        nextLessonBtn.onclick = () => resolve("next");
+        document.getElementById("buttons").appendChild(nextLessonBtn);
     });
 }
 
@@ -721,6 +717,7 @@ async function endLesson() {
 
 async function cycleExercises() {
     while (true) {
+        // Reset screen.
         THIS_RESULT = null;
         document.getElementById("question").innerHTML = "";
         document.getElementById("hint").innerHTML = "";
@@ -732,28 +729,38 @@ async function cycleExercises() {
         clearButtonsDiv();
         skipEnable();
 
+        // Lesson is completed.
         if (numExercisesDone === NUM_EXERCISES_PER_LESSON) {
+            // If there are no more mistakes left...
             if (failedExercises.length === 0) {
+                // If the lesson has already ended in a previous iteration and the user chose to revise all mistakes,
+                // just reset everything and start new lesson.
                 if (lessonEndedWithReviseChoice) {
                     resetLessonProgress();
-                } else {
+                }
+                // The lesson ended now with 0 mistakes. Show end-of-lesson screen.
+                else {
                     await endLesson();
                 }
                 continue;
             }
+            // If the lesson has just ended now with some mistakes...
             if (!lessonEndedWithReviseChoice) {
+                // Ask whether to revise the mistakes or jump to next lesson directly.
                 const choice = await showEndLessonScreen(true);
                 if (choice === "next") {
                     resetLessonProgress();
                     continue;
                 }
             }
+            // The lesson has just ended now and the user chose to revise the mistakes.
             lessonEndedWithReviseChoice = true;
             clearButtonsDiv();
             await reviseMistake();
             continue;
         }
 
+        // Choose random exercise and execute it.
         const types = [ExerciseTranslation, ExerciseTranslationWithGuesses, ExerciseMatching, ExerciseFillBlanks, ExerciseReorderSentence];
         const randomExercise = types[Math.floor(Math.random() * types.length)];
         EXERCISE = new randomExercise();
@@ -769,12 +776,15 @@ async function cycleExercises() {
     }
 }
 
+// Show answer of current exercise, save result as SKIPPED, and add next button.
 async function skipExercise() {
     EXERCISE.showAnswer();
     saveResult(ExerciseResult.SKIPPED);
     await new Promise((resolve) => {
         addNextButton(resolve);
     });
+    // Only update progress if the lesson is still going.
+    // In other case it means the current exercise is a mistake being revised.
     if (numExercisesDone < NUM_EXERCISES_PER_LESSON) {
         numExercisesDone++;
         numExercisesSkipped++;
@@ -793,10 +803,12 @@ function skipDisable() {
 }
 
 function saveMistake(exercise) {
-    if (failedExercises.length < MAX_FAILED_EXERCISES)
+    if (failedExercises.length < NUM_EXERCISES_PER_LESSON)
         failedExercises.push(exercise);
 }
 
+// Run first mistake of the list and delete it from the list.
+// If the user guesses wrong again, the exercise is added back to the list when saving the result.
 async function reviseMistake() {
     EXERCISE = failedExercises.at(0);
     await EXERCISE.do();
@@ -813,23 +825,22 @@ function saveResult(result) {
 
 
 const NUM_EXERCISES_PER_LESSON = 10;
-const MAX_FAILED_EXERCISES = NUM_EXERCISES_PER_LESSON;
 const PROGRESS_BAR_GAP = 3 * (NUM_EXERCISES_PER_LESSON - 1);
 let INPUT_DATA = [];
 let END_LESSON_MESSAGES = {};
+// Exercise object with question and answer. Saved in case the user makes a mistake and this has to be run again.
 let EXERCISE = null;
+// Result of last exercise done by user.
 let THIS_RESULT = null;
 
 let numExercisesDone = 0;
-let failedExercises = [];
-let numExercisesFailed = 0;
 let numExercisesSkipped = 0;
-/** True after the two-button lesson end was shown with mistakes pending (skip duplicate completion screen when queue clears). */
+let numExercisesFailed = 0;
+let failedExercises = [];
 let lessonEndedWithReviseChoice = false;
 
+
 async function init() {
-    const label = document.getElementById("progress-label");
-    label.textContent = 0 + "/" + NUM_EXERCISES_PER_LESSON;
     const [langRes, endMsgRes] = await Promise.all([
         fetch("data/language_data.json"),
         fetch("data/end_lesson_messages.json"),
