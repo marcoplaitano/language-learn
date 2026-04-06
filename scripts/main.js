@@ -40,20 +40,23 @@ function levenshtein(a, b) {
     return matrix[b.length][a.length];
 }
 
+function pickRandomMessage(list) {
+    return list[Math.floor(Math.random() * list.length)];
+}
+
 // Choose which end-of-lesson message to display based on number of failed and skipped exercises.
 function getEndMessage(mistakes, skips, total) {
     const ratioMistake = mistakes / total;
     const ratioSkip = skips / total;
-    const pick = arr => arr[Math.floor(Math.random() * arr.length)];
 
-    if (ratioSkip >= 0.5) return pick(END_LESSON_MESSAGES.skipped_most);
-    if (ratioSkip >= 0.2) return pick(END_LESSON_MESSAGES.skipped_some);
-    if (ratioMistake === 0)  return pick(END_LESSON_MESSAGES.perfect);
-    if (ratioMistake <= 0.1) return pick(END_LESSON_MESSAGES.excellent);
-    if (ratioMistake <= 0.3) return pick(END_LESSON_MESSAGES.great);
-    if (ratioMistake <= 0.5) return pick(END_LESSON_MESSAGES.okay);
-    if (ratioMistake <= 0.7) return pick(END_LESSON_MESSAGES.poor);
-    else return pick(END_LESSON_MESSAGES.terrible);
+    if (ratioSkip >= 0.5) return pickRandomMessage(END_LESSON_MESSAGES.skipped_most);
+    if (ratioSkip >= 0.2) return pickRandomMessage(END_LESSON_MESSAGES.skipped_some);
+    if (ratioMistake === 0)  return pickRandomMessage(END_LESSON_MESSAGES.lesson_perfect);
+    if (ratioMistake <= 0.1) return pickRandomMessage(END_LESSON_MESSAGES.lesson_excellent);
+    if (ratioMistake <= 0.3) return pickRandomMessage(END_LESSON_MESSAGES.lesson_great);
+    if (ratioMistake <= 0.5) return pickRandomMessage(END_LESSON_MESSAGES.lesson_okay);
+    if (ratioMistake <= 0.7) return pickRandomMessage(END_LESSON_MESSAGES.lesson_poor);
+    else return pickRandomMessage(END_LESSON_MESSAGES.lesson_terrible);
 }
 
 
@@ -667,25 +670,28 @@ function clearButtonsDiv() {
     buttons.forEach(btn => btn.remove());
 }
 
-async function showEndLessonScreen(offerRevise = false) {
+async function showReivisonScreen() {
+    document.getElementById("title").textContent = "Mistakes revision";
+    document.getElementById("question").textContent = pickRandomMessage(END_LESSON_MESSAGES.repeat_mistakes);
+    skipDisable();
+    return new Promise((resolve) => {
+        const startRevisionBtn = document.createElement("button");
+        startRevisionBtn.textContent = "Start revision";
+        startRevisionBtn.className = "btn-next";
+        startRevisionBtn.onclick = () => resolve();
+        document.getElementById("buttons").appendChild(startRevisionBtn);
+    });
+}
+
+async function showEndLessonScreen() {
     document.getElementById("title").textContent = "Lesson Completed!";
     document.getElementById("question").textContent = getEndMessage(numExercisesFailed, numExercisesSkipped, NUM_EXERCISES_PER_LESSON);
     skipDisable();
-    // If function called with offerRevise=true then show 2 buttons to choose whether to revise mistakes or
-    // go to next lesson.
-    // Otherwise, only show the Next lesson button.
     return new Promise((resolve) => {
-        if (offerRevise) {
-            const reviseBtn = document.createElement("button");
-            reviseBtn.textContent = "Revise mistakes";
-            reviseBtn.className = "btn-next";
-            reviseBtn.onclick = () => resolve("revise");
-            document.getElementById("buttons").appendChild(reviseBtn);
-        }
         const nextLessonBtn = document.createElement("button");
         nextLessonBtn.textContent = "Next lesson";
         nextLessonBtn.className = "btn-next";
-        nextLessonBtn.onclick = () => resolve("next");
+        nextLessonBtn.onclick = () => resolve();
         document.getElementById("buttons").appendChild(nextLessonBtn);
     });
 }
@@ -701,7 +707,7 @@ function resetLessonProgress() {
     numExercisesFailed = 0;
     failedExercises = [];
     numExercisesSkipped = 0;
-    lessonEndedWithReviseChoice = false;
+    startedRevision = false;
     updateProgressBar();
 }
 
@@ -731,30 +737,19 @@ async function cycleExercises() {
 
         // Lesson is completed.
         if (numExercisesDone === NUM_EXERCISES_PER_LESSON) {
-            // If there are no more mistakes left...
+            // If there are no more mistakes left either because the user made none or finished revision,
+            // end current lesson.
             if (failedExercises.length === 0) {
-                // If the lesson has already ended in a previous iteration and the user chose to revise all mistakes,
-                // just reset everything and start new lesson.
-                if (lessonEndedWithReviseChoice) {
-                    resetLessonProgress();
-                }
-                // The lesson ended now with 0 mistakes. Show end-of-lesson screen.
-                else {
-                    await endLesson();
-                }
+                await endLesson();
                 continue;
             }
-            // If the lesson has just ended now with some mistakes...
-            if (!lessonEndedWithReviseChoice) {
-                // Ask whether to revise the mistakes or jump to next lesson directly.
-                const choice = await showEndLessonScreen(true);
-                if (choice === "next") {
-                    resetLessonProgress();
-                    continue;
-                }
+            // If the lesson has ended just now with some mistakes...
+            if (!startedRevision) {
+                // Show screen prompting the user to revise their mistakes.
+                await showReivisonScreen();
             }
-            // The lesson has just ended now and the user chose to revise the mistakes.
-            lessonEndedWithReviseChoice = true;
+            // Start/continue mistakes revision.
+            startedRevision = true;
             clearButtonsDiv();
             await reviseMistake();
             continue;
@@ -804,15 +799,16 @@ function skipDisable() {
 
 function saveMistake(exercise) {
     if (failedExercises.length < NUM_EXERCISES_PER_LESSON)
-        failedExercises.push(exercise);
+        if (failedExercises.indexOf(exercise) === -1)
+            failedExercises.push(exercise);
 }
 
-// Run first mistake of the list and delete it from the list.
-// If the user guesses wrong again, the exercise is added back to the list when saving the result.
+// Run first mistake of the list and delete it from the list if done correctly.
 async function reviseMistake() {
     EXERCISE = failedExercises.at(0);
     await EXERCISE.do();
-    failedExercises.shift();
+    if (THIS_RESULT === ExerciseResult.CORRECT)
+        failedExercises.shift();
 }
 
 function saveResult(result) {
@@ -837,7 +833,7 @@ let numExercisesDone = 0;
 let numExercisesSkipped = 0;
 let numExercisesFailed = 0;
 let failedExercises = [];
-let lessonEndedWithReviseChoice = false;
+let startedRevision = false;
 
 
 async function init() {

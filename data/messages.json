@@ -1,5 +1,16 @@
 {
-    "perfect": [
+    "repeat_mistakes": [
+        "Not so fast! A few words have filed a formal complaint about your answers. 📋",
+        "Some exercises felt personally hurt by your performance. Time to apologize. 🥲",
+        "The words you butchered earlier deserve a second chance. And honestly, so do you. 😇",
+        "A few mistakes are still here, awkwardly waiting for you to fix them. 👀",
+        "Surprise! The lesson isn't quite done with you yet. Bet you didn't miss it. 🎉",
+        "Some vocabulary is still traumatized by your previous attempts. Let's try again. 🩹",
+        "The words you got wrong have had time to prepare. Good luck. ⚔️",
+        "A few exercises want a rematch. They're feeling confident. You should too, maybe. 💪",
+        "Not everyone made it out alive. Let's go back for the survivors. 🚑"
+    ],
+    "lesson_perfect": [
         "Flawless! Are you sure you're not just a Turkish person pranking me? 🇹🇷",
         "Zero mistakes. I'm genuinely a little scared of you. 👁️",
         "Perfect score! The vocab don't stand a chance. 🏹",
@@ -8,7 +19,7 @@
         "Zero mistakes! I am shaking. 📖",
         "Perfect score! Turkey is basically your second home. 🇹🇷"
     ],
-    "excellent": [
+    "lesson_excellent": [
         "So close to flawless it hurts — in a good way! 🌟",
         "Nearly spotless! One phrase put up a fight. 💫",
         "Excellent! That one mistake is already forgotten. 🧹",
@@ -19,7 +30,7 @@
         "Nearly spotless! That one phrase will regret crossing you. ⚔️",
         "One slip? Barely counts. You're basically fluent. 💫"
     ],
-    "great": [
+    "lesson_great": [
         "Solid work! The vocab is clearly sticking. 🧠",
         "Great effort! A few words are still hiding from you. 🙈",
         "You're building something real here. Keep going! 🏗️",
@@ -31,21 +42,21 @@
         "You're getting there! The finish line can see you, sort of. 🏃",
         "Good job! Istanbul wasn't built in a day, and neither is this. 🏗️"
     ],
-    "okay": [
+    "lesson_okay": [
         "Half right! Technically, that's also half wrong. Just saying. 🥛",
         "50%! A coin flip could have matched this. To be fair. 🪙",
         "You can do better. Your future self is cringing slightly. 😬",
         "The glass is half full! Of mistakes. But also answers. 🔄",
         "Halfway there! The other half is where the actual words live. 📚"
     ],
-    "poor": [
+    "lesson_poor": [
         "Turkish: 7, You: 3. The language is starting to feel sorry for you. 😬",
         "A few more mistakes and the vocab will start avoiding you. 🏃💨",
         "Rough round! The vocab is openly gossiping about you now. 🗣️",
         "You got some right! Just... not most of them. Details. 📉",
         "The vocab fought back today. Embarrassingly, they won. ⚔️"
     ],
-    "terrible": [
+    "lesson_terrible": [
         "Wow. Just... wow. The vocab has filed a complaint. 📖",
         "At this score, even the wrong answers are disappointed in you. 😔",
         "Turkish is hard. What you just did was also hard, but differently. 💀",
