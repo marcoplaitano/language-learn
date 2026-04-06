@@ -17,8 +17,6 @@ Asked a LLM model to give some examples that I then collected in JSON format for
 
 ### Website
 
-+ keep track of lessons result for a scoreboard
-
 ### Exercises
 
 + new exercise type: given a word form the plural

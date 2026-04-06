@@ -67,8 +67,9 @@ function createEntry(correct, failed, skipped) {
 
 function showScoreboard() {
     const scores = readScores();
-    console.log(scores);
     const scoreboard = document.getElementById("scoreboard");
+    if (scores.length === 0)
+        return;
     scoreboard.innerHTML = "";
 
     scores.forEach(score => {
