@@ -698,6 +698,49 @@ async function showEndLessonScreen() {
 
 
 //////////////////////////////////////////////////
+// STREAK AND SCORES
+//////////////////////////////////////////////////
+
+function updateStreak() {
+    // Only update streak once per day.
+    const today = new Date().toISOString().split('T')[0];
+    if (getStreakDate() === today)
+        return;
+    localStorage.setItem("streakNum", (getStreak() + 1).toString());
+    localStorage.setItem("streakLastDate", new Date().toISOString().split('T')[0]); // "YYYY-MM-DD"
+}
+
+function getStreak() {
+    return parseInt(localStorage.getItem("streakNum")) || 0;
+}
+
+function getStreakDate() {
+    return localStorage.getItem("streakLastDate");
+}
+
+function resetStreak() {
+    localStorage.setItem("streakNum", "0");
+    localStorage.removeItem("streakLastDate");
+}
+
+function showStreak() {
+    // If last date is older than yesterday, reset streak.
+    const streakLastDate = localStorage.getItem("streakLastDate");
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    const yesterdayStr = yesterday.toISOString().split('T')[0];
+    if (streakLastDate === null || streakLastDate < yesterdayStr) {
+        resetStreak();
+    }
+
+    const streakNum = getStreak();
+    const streakDiv = document.getElementById("streak");
+    streakDiv.textContent = `🔥 Streak: ${streakNum}`;
+    streakDiv.style.display = "";
+}
+
+
+//////////////////////////////////////////////////
 // MAIN FLOW
 //////////////////////////////////////////////////
 
@@ -719,6 +762,8 @@ async function startLesson() {
 async function endLesson() {
     await showEndLessonScreen();
     resetLessonProgress();
+    updateStreak();
+    showStreak();
 }
 
 async function cycleExercises() {
@@ -821,7 +866,7 @@ function saveResult(result) {
 }
 
 
-const NUM_EXERCISES_PER_LESSON = 2;
+const NUM_EXERCISES_PER_LESSON = 10;
 const PROGRESS_BAR_GAP = 3 * (NUM_EXERCISES_PER_LESSON - 1);
 let INPUT_DATA = [];
 let MESSAGES_DATA = {};
@@ -838,6 +883,7 @@ let startedRevision = false;
 
 
 async function init() {
+    showStreak();
     const [langRes, endMsgRes] = await Promise.all([
         fetch("data/language_data.json"),
         fetch("data/messages.json"),

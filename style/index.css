@@ -30,6 +30,25 @@ footer {
 }
 
 
+/* ***** STREAK ***** */
+.title-streak-container {
+  display: flex;
+  justify-content: space-between;
+  width: 55%;
+}
+#streak {
+  display: flex;
+  align-items: center;
+}
+@media screen and (max-width:600px) {
+  .title-streak-container {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+  }
+}
+
+
 /* ***** QUESTION ***** */
 #question {
   margin-bottom: 1.2rem;
