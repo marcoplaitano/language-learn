@@ -1,0 +1,32 @@
+.scoreboard-entry {
+  display: grid;
+  grid-template-columns: 1fr 12rem;
+  gap: 1.6rem;
+}
+
+.scorebar {
+  display: flex;
+  height: 10px;
+  border-radius: 999px;
+  overflow: hidden;
+  margin-top: 10px;
+}
+
+.scoreboard-text-correct {
+  color: var(--color-green);
+}
+.scorebar-correct {
+  background: var(--color-green);
+}
+.scoreboard-text-failed {
+  color: var(--color-red);
+}
+.scorebar-failed {
+  background: var(--color-red);
+}
+.scoreboard-text-skipped {
+  color: var(--color-text2);
+}
+.scorebar-skipped {
+  background: var(--color-text2);
+}

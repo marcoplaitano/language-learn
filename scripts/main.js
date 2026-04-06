@@ -703,11 +703,10 @@ async function showEndLessonScreen() {
 
 function updateStreak() {
     // Only update streak once per day.
-    const today = new Date().toISOString().split('T')[0];
-    if (getStreakDate() === today)
+    if (getStreakDate() === TODAY_DATE)
         return;
     localStorage.setItem("streakNum", (getStreak() + 1).toString());
-    localStorage.setItem("streakLastDate", new Date().toISOString().split('T')[0]); // "YYYY-MM-DD"
+    localStorage.setItem("streakLastDate", TODAY_DATE);
 }
 
 function getStreak() {
@@ -739,12 +738,24 @@ function showStreak() {
     streakDiv.style.display = "";
 }
 
+function saveLessonScore() {
+    const MAX_LESSONS_SAVED = 50;
+    let lessons = JSON.parse(localStorage.getItem("lessonScores")) || [];
+    // Add to the beginning of the list.
+    lessons.unshift(LESSON_RESULTS);
+    if (lessons.length > MAX_LESSONS_SAVED)
+        lessons.length = MAX_LESSONS_SAVED;
+    localStorage.setItem("lessonScores", JSON.stringify(lessons));
+}
+
 
 //////////////////////////////////////////////////
 // MAIN FLOW
 //////////////////////////////////////////////////
 
 function resetLessonProgress() {
+    LESSON_RESULTS = {};
+    LESSON_RESULTS.date = TODAY_DATE;
     THIS_RESULT = null;
     numExercisesDone = 0;
     numExercisesFailed = 0;
@@ -761,6 +772,7 @@ async function startLesson() {
 
 async function endLesson() {
     await showEndLessonScreen();
+    saveLessonScore();
     resetLessonProgress();
     updateStreak();
     showStreak();
@@ -859,6 +871,9 @@ async function reviseMistake() {
 
 function saveResult(result) {
     THIS_RESULT = result;
+    LESSON_RESULTS.correct = (LESSON_RESULTS.correct || 0) + (result === ExerciseResult.CORRECT ? 1 : 0);
+    LESSON_RESULTS.failed = (LESSON_RESULTS.failed || 0) + (result === ExerciseResult.FAILED ? 1 : 0);
+    LESSON_RESULTS.skipped = (LESSON_RESULTS.skipped || 0) + (result === ExerciseResult.SKIPPED ? 1 : 0);
     if (result === ExerciseResult.FAILED) {
         saveMistake(EXERCISE);
         numExercisesFailed++;
@@ -866,6 +881,7 @@ function saveResult(result) {
 }
 
 
+const TODAY_DATE = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD"
 const NUM_EXERCISES_PER_LESSON = 10;
 const PROGRESS_BAR_GAP = 3 * (NUM_EXERCISES_PER_LESSON - 1);
 let INPUT_DATA = [];
@@ -874,6 +890,7 @@ let MESSAGES_DATA = {};
 let EXERCISE = null;
 // Result of last exercise done by user.
 let THIS_RESULT = null;
+let LESSON_RESULTS = {};
 
 let numExercisesDone = 0;
 let numExercisesSkipped = 0;

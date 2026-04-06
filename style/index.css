@@ -12,6 +12,12 @@ main {
   flex: 1;
   overflow-y: auto;
 }
+@media screen and (min-height:700px) {
+  main {
+    margin-top: 6rem;
+  }
+}
+
 footer {
   margin-top: 0;
   flex-shrink: 0;

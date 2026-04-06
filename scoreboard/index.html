@@ -7,37 +7,49 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon/favicon-16x16.png">
   <link rel="manifest" href="/favicon/site.webmanifest">
+  <link rel="canonical" href="https://turkingo.netlify.app/scoreboard/">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <meta name="description" content="Error 404: Page not found.">
+
+  <meta property="og:title" content="Scoreboard - TürKingo">
+  <meta property="twitter:title" content="Scoreboard - TürKingo">
+  <meta property="og:description" content="A scrappy, no-subscription alternative to Duolingo for English–Turkish practice.">
+  <meta property="twitter:description" content="A scrappy, no-subscription alternative to Duolingo for English–Turkish practice.">
+  <meta property="og:url" content="https://turkingo.netlify.app">
+  <meta name="twitter:card" content="summary">
+  <link rel="me" href="https://github.com/marcoplaitano">
 
   <meta name="theme-color" content="#EFF1F5" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#1E1E2E" media="(prefers-color-scheme: dark)">
   <link rel="stylesheet" href="/style/style.css">
+  <link rel="stylesheet" href="/style/scoreboard.css">
   <script type="text/javascript" src="/scripts/theme.js"></script>
-  <title>404 - TürKingo</title>
+  <title>Scoreboard - TürKingo</title>
 </head>
 
-<body>
+<body id="top">
   <header id="banner">
     <h1><a href="/" translate="no" title="TürKingo">TürKingo</a></h1>
     <nav>
       <a class="navbar-item" href="/">Home</a>
-      <a class="navbar-item" href="/scoreboard/">Scores</a>
+      <a class="navbar-item" id="navbar-curr-page">Scores</a>
       <a class="navbar-item" href="/about/">About</a>
     </nav>
   </header>
 
   <main>
-    <h1>404... Oops!</h1>
-    <p>The page you were looking for doesn't exist.</p>
-    <p>Double-check the URL, or use the navigation bar to find your way around the website.</p>
-    </main>
+    <article>
+      <h1>Scoreboard</h1>
+      <div id="scoreboard">Complete a lesson to see your scores here.</div>
+    </article>
+  </main>
 
   <footer>
     <hr>
     <p><span translate="no">© 2026 Marco Plaitano</span></p>
   </footer>
 </body>
+
+<script type="text/javascript" src="/scripts/scoreboard.js"></script>
 
 </html>
