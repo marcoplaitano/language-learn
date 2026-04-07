@@ -17,6 +17,9 @@ Asked a LLM model to give some examples that I then collected in JSON format for
 
 ### Website
 
++ animation when streak increases or is reset
++ fix scoreboard bug where number of exercises includes mistakes revision
+
 ### Exercises
 
 + new exercise type: given a word form the plural
