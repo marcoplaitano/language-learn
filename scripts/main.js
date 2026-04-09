@@ -726,6 +726,8 @@ function resetStreak() {
 
 let closeTimer;
 function streakAnimationStart(streakNum) {
+    if (sessionStorage.getItem("animationDone"))
+        return;
     const overlayNum = document.getElementById("overlay-num");
     overlayNum.textContent = streakNum;
     const overlayLabel = document.getElementById("overlay-label");
@@ -746,7 +748,10 @@ function streakAnimationStart(streakNum) {
         document.addEventListener("click", endAnimationClick);
         document.addEventListener("touchstart", endAnimationClick);
     }, 50);
+
+    sessionStorage.setItem("animationDone", true);
 }
+
 function streakAnimationEnd() {
     const overlay = document.getElementById("overlay-container");
     overlay.classList.remove("show");
@@ -769,7 +774,7 @@ function showStreak() {
     const yesterdayStr = yesterday.toISOString().split('T')[0];
     if (streakLastDate === null || streakLastDate < yesterdayStr) {
         resetStreak();
-        streakAnimationStart(0);
+        if (streakLastDate < yesterdayStr) streakAnimationStart(0);
     }
 
     const streakNum = getStreak();
