@@ -672,7 +672,7 @@ function clearButtonsDiv() {
 
 async function showReivisonScreen() {
     document.getElementById("title").textContent = "Mistakes revision";
-    document.getElementById("question").textContent = pickRandomMessage(MESSAGES_DATA.repeat_mistakes);
+    document.getElementById("question").textContent = "Let's fix the mistakes you made!";
     skipDisable();
     return new Promise((resolve) => {
         const startRevisionBtn = document.createElement("button");
