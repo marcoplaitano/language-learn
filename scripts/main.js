@@ -44,6 +44,14 @@ function pickRandomMessage(list) {
     return list[Math.floor(Math.random() * list.length)];
 }
 
+// Because the language data in my JSON can be both an array or a single string.
+function getLanguageValue(value) {
+    if (Array.isArray(value))
+        return value[Math.floor(Math.random() * value.length)];
+    else
+        return value;
+}
+
 // Choose which end-of-lesson message to display based on number of failed and skipped exercises.
 function getEndMessage(mistakes, skips, total) {
     const ratioMistake = mistakes / total;
@@ -63,8 +71,8 @@ function getEndMessage(mistakes, skips, total) {
 class ExerciseData {
     constructor(data) {
         this.data = data;
-        this.langEN = data["l-EN"];
-        this.langTR = data["l-TR"];
+        this.langEN = getLanguageValue(data["l-EN"]);
+        this.langTR = getLanguageValue(data["l-TR"]);
         this.type = data["type"];
     }
 
@@ -176,7 +184,7 @@ class ExerciseTranslationWithGuesses {
             .filter(i => i.type !== "sentence")
             .filter(i => i !== item)
             .slice(0, 3)
-            .map(i => this.toTurkish ? i["l-TR"] : i["l-EN"]);
+            .map(i => this.toTurkish ? getLanguageValue(i["l-TR"]) : getLanguageValue(i["l-EN"]));
         this.correctOption = null;
     }
 
@@ -253,7 +261,7 @@ class ExerciseMatching {
             .filter(i => i.type !== "sentence")
             .filter(i => i !== item)
             .slice(0, 3)
-            .map(i => this.toTurkish ? i["l-TR"] : i["l-EN"]);
+            .map(i => this.toTurkish ? getLanguageValue(i["l-TR"]) : getLanguageValue(i["l-EN"]));
         this.sample = shuffle([...INPUT_DATA])
             .filter(i => i.type !== "sentence")
             .slice(0, 4);
@@ -272,8 +280,8 @@ class ExerciseMatching {
             document.getElementById("title").textContent = "Match the pairs";
             const answersDiv = document.getElementById("answers");
 
-            const leftWords = this.sample.map(i => i["l-TR"]);
-            const rightWords = shuffle(this.sample.map(i => i["l-EN"]));
+            const leftWords = this.sample.map(i => getLanguageValue(i["l-TR"]));
+            const rightWords = shuffle(this.sample.map(i => getLanguageValue(i["l-EN"])));
 
             this.container.style.cssText = "display:flex;justify-content:space-between";
 
@@ -329,7 +337,7 @@ class ExerciseMatching {
         let correctCount = 0;
 
         for (const [turk, eng] of Object.entries(this.pairs)) {
-            const correct = this.sample.find(i => i["l-TR"] === turk)["l-EN"];
+            const correct = getLanguageValue(this.sample.find(i => getLanguageValue(i["l-TR"]) === turk)["l-EN"]);
 
             const leftBtn = [...this.leftCol.children].find(b => b.textContent === turk);
             const rightBtn = [...this.rightCol.children].find(b => b.textContent === eng);
@@ -433,7 +441,7 @@ class ExerciseFillBlanks {
                 .filter(i => i["type"] === "word")
                 .filter(i => i !== this.item)
                 .slice(0, 3)
-                .map(i => i["l-TR"]);
+                .map(i => getLanguageValue(i["l-TR"]));
 
             const options = shuffle([...this.correctGuesses, ...wrongGuesses]);
 
