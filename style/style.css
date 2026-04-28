@@ -125,6 +125,7 @@ header#banner h1 {
 }
 header#banner h1 a {
   color: var(--color-text);
+  text-decoration: none;
 }
 header#banner nav {
   display: flex;
@@ -150,9 +151,10 @@ header#banner nav a#navbar-curr-page {
 a {
   cursor: pointer;
   color: var(--color-accent);
-  text-decoration: none;
+  text-decoration: underline;
   text-decoration-thickness: 1px;
   text-underline-offset: 3px;
+  text-decoration-color: var(--color-accent);
 }
 a:active:not(#navbar-curr-page) {
   filter: brightness(80%);
