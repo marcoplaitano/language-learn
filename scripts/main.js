@@ -180,8 +180,8 @@ function saveLessonScore() {
     if (lessons.length > MAX_LESSONS_SAVED)
         lessons.length = MAX_LESSONS_SAVED;
     localStorage.setItem("lessonScores", JSON.stringify(lessons));
-    // If number of correct exercises is > 80% the user gets a streak
-    if (LESSON_RESULTS.correct > NUM_EXERCISES_PER_LESSON * 0.8)
+    // If number of correct exercises is big enough, the user gets a streak
+    if (LESSON_RESULTS.correct >= MIN_CORRECT_EXERCISES_FOR_STREAK_FREEZE)
         increaseStreakFreezes();
 }
 
@@ -325,6 +325,7 @@ function saveResult(result) {
 
 const NUM_EXERCISES_PER_LESSON = 10;
 const PROGRESS_BAR_GAP = 3 * (NUM_EXERCISES_PER_LESSON - 1);
+const MIN_CORRECT_EXERCISES_FOR_STREAK_FREEZE = NUM_EXERCISES_PER_LESSON * 0.7;
 let INPUT_DATA = [];
 let MESSAGES_DATA = {};
 // Exercise object with question and answer. Saved in case the user makes a mistake and this has to be run again.
