@@ -317,7 +317,7 @@
   { "type": "sentence", "l-EN": "what is your name", "l-TR": "adın ne" },
   { "type": "sentence", "l-EN": "my name is marco", "l-TR": "benim adım marco" },
   { "type": "sentence", "l-EN": "where are you from", "l-TR": "nerelisiniz" },
-  { "type": "sentence", "l-EN": "i am from england", "l-TR": "italya'dan geliyorum" },
+  { "type": "sentence", "l-EN": "i am from italy", "l-TR": "italya'dan geliyorum" },
   { "type": "sentence", "l-EN": "i live in istanbul", "l-TR": "istanbul'da yaşıyorum" },
   { "type": "sentence", "l-EN": "do you speak english", "l-TR": "ingilizce biliyor musunuz" },
   { "type": "sentence", "l-EN": "i don't speak turkish well", "l-TR": "türkçeyi iyi konuşamıyorum" },
