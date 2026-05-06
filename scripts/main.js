@@ -145,6 +145,12 @@ function isFireFreezed() {
     return document.querySelector(".fire-freezed") !== null;
 }
 
+function useStreakFreeze() {
+    setFireFreezed(true);
+    decreaseStreakFreezes();
+    sessionStorage.setItem("freezed", true);
+}
+
 
 //////////////////////////////////////////////////
 // STREAK AND SCORES
@@ -164,10 +170,9 @@ function showStreak() {
     // of streak freezes left.
     if (streakLastDate < yesterdayStr) {
         if (getNumFreezes() > 0) {
-            setFireFreezed(true);
-            decreaseStreakFreezes();
+            useStreakFreeze();
         }
-        else
+        else if (!sessionStorage.getItem("freeze"))
             resetStreak();
         streakAnimationStart(getStreak());
     }
