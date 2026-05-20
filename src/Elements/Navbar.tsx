@@ -5,20 +5,19 @@ import { NavLink } from 'react-router-dom';
 import Title from './Title';
 
 interface PropsNavbar {
-  streak: number;
+  streakTitle: number;
 }
 
-export default function Navbar({streak} : PropsNavbar) {
+export default function Navbar({streakTitle} : PropsNavbar) {
   const navItems = [
     { name: 'Home', href: '/' },
-    { name: 'Scores', href: '/scores/' },
     { name: 'Learn', href: '/learn/' },
     { name: 'About', href: '/about/' },
   ];
 
   return (
     <header>
-      <Title streak={streak} />
+      <Title streakTitle={streakTitle} />
       <nav>
         {navItems.map((item) => (
           <NavLink key={item.name} to={item.href} className={({ isActive }) => `navbar-item${isActive ? ' navbar-curr-page' : ''}`}>

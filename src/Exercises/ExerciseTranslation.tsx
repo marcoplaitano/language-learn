@@ -44,10 +44,11 @@ export default function ExerciseTranslation({ inputData, onCheck, skipped }: Pro
     const norm = normalizeTurkish(userInput.trim().toLowerCase());
     const normAns = normalizeTurkish(answer);
     const dist = levenshtein(norm, normAns);
-    const isCorrect = dist === 0 || dist === 1; // TODO: check this
+    const isCorrect = dist === 0;
+    const hasMinorTypo = dist > 0 && dist <= 2;
     setCorrect(isCorrect);
     setChecked(true);
-    onCheck(isCorrect && ExerciseResult.CORRECT || ExerciseResult.FAILED);
+    onCheck((isCorrect || hasMinorTypo) && ExerciseResult.CORRECT || ExerciseResult.FAILED);
   };
 
   return (

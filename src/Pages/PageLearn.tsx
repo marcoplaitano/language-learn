@@ -133,8 +133,7 @@ export default function PageLearn() {
       <article>
         <h1>Learn</h1>
 
-        {/* ── Add new data ── */}
-        <h2>Add new data</h2>
+        <h2>Add data</h2>
         <div className="add-item-container">
           <input
             type="text"
@@ -173,7 +172,7 @@ export default function PageLearn() {
           {addResult && <p id="add-result-p">{addResult}</p>}
         </div>
 
-        {/* ── Search ── */}
+
         <h2>Search data</h2>
         <div className="search-container">
           <input
@@ -189,11 +188,9 @@ export default function PageLearn() {
           />
         </div>
 
-        {/* ── Status messages ── */}
         {loadError && <p className="p-error">{loadError}</p>}
         {noResults && <p id="no-result-p">No results.</p>}
 
-        {/* ── Lists ── */}
         <ItemTable title="Words"     items={words}     query={normalizedQuery} />
         <ItemTable title="Phrases"   items={phrases}   query={normalizedQuery} />
         <ItemTable title="Sentences" items={sentences} query={normalizedQuery} />

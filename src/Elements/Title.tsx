@@ -4,21 +4,21 @@ import '../style/Title.css'
 import { getStreak, isStreakFreezed } from '../globals';
 
 interface PropsTitle {
-  streak: number;
+  streakTitle: number;
 }
 
-export default function Title({streak} : PropsTitle) {
+export default function Title({streakTitle} : PropsTitle) {
   const [streakNum, setStreakNum] = useState<number>(getStreak());
   const [isFreezed, setIsFreezed] = useState<boolean>(false);
 
   useEffect(() => {
-    setStreakNum(streak);
+    setStreakNum(streakTitle);
     const checkFreezeStatus = async () => {
       const freezed = await isStreakFreezed();
       setIsFreezed(freezed);
     };
     checkFreezeStatus();
-  }, [streak]);
+  }, [streakTitle]);
 
 
   return (

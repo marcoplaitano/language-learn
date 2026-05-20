@@ -20,7 +20,8 @@ The website is available at https://turkingo.netlify.app.
 
 ## Input data
 
-Asked a LLM model to give some examples that I then collected in JSON format for easy indexing.
+Asked a LLM model to give some examples that I then collected in a SQL databaase.  
+The user can also add more examples with a form in the "Add data" section of the Learn page.
 
 - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
 
@@ -28,7 +29,11 @@ Asked a LLM model to give some examples that I then collected in JSON format for
 
 ### Website
 
-+ rewrite in React
++ rewrite in react exercise fill blanks
++ rewrite in react exercise match translation
++ rewrite in react exercise reorder sentence
++ style
++ fix react warnings
 
 ### Exercises
 

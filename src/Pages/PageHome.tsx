@@ -2,9 +2,10 @@ import '../style/PageHome.css'
 import '../style/streak_animation.css'
 
 import { useState, useEffect, useCallback } from "react";
-import { DB_CLIENT, DB_TABLE_NAME, getStreak, LanguageItemData, NUM_EXERCISES_PER_LESSON, updateStreak } from "../globals.tsx";
+import { DB_CLIENT, DB_TABLE_NAME, getStreak, increaseStreakFreezes, LanguageItemData, NUM_EXERCISES_PER_LESSON, updateStreak, initStreak } from "../globals.tsx";
 import type { RawItem } from "../globals.tsx";
 import { ExerciseResult } from "../globals.tsx";
+import { useToast } from "../Elements/Toast.tsx";
 
 import ExerciseTranslation from '../Exercises/ExerciseTranslation.tsx';
 import ExerciseMatchPairs from '../Exercises/ExerciseMatchPairs.tsx';
@@ -14,10 +15,11 @@ import ProgressBar from '../Elements/ProgressBar.tsx';
 import EndOfLesson from '../Elements/EndOfLesson.tsx';
 
 interface PropsPageHome {
-  setStreak: any;
+  setStreakTitle: any;
 }
 
-export default function PageHome({setStreak} : PropsPageHome) {
+export default function PageHome({setStreakTitle} : PropsPageHome) {
+  const toast = useToast();
   const [data, setData] = useState<LanguageItemData[]>();
   const [loading, setLoading] = useState(true);
   const [loadError, setLoadError] = useState<string | null>(null);
@@ -25,12 +27,13 @@ export default function PageHome({setStreak} : PropsPageHome) {
   const [skipped, setSkipped] = useState<boolean>(false);
   const [progress, setProgress] = useState<ExerciseResult | null>(null);
   const [exerciseNum, setExerciseNum] = useState<number>(0);
+  const [numExercisesCorrect, setNumExerciseCorrect] = useState<number>(0);
   const [lessonEnded, setLessonEnded] = useState<boolean>(false);
 
   // ── Data loading ──────────────────────────────────────────────────────────
 
   const loadData = useCallback(async () => {
-    setStreak(getStreak());
+    setStreakTitle(getStreak());
     setLoading(true);
     setLoadError(null);
     try {
@@ -46,15 +49,23 @@ export default function PageHome({setStreak} : PropsPageHome) {
   }, [DB_CLIENT]);
 
   useEffect(() => {
+    const {streakNum, wasFreezed} = initStreak();
+    if (wasFreezed)
+      toast(`Your streak of ${streakNum} days was frozen!`, "info");
     loadData();
   }, [loadData]);
 
   useEffect(() => {
     if (exerciseNum === NUM_EXERCISES_PER_LESSON) {
-      // TODO: Save lesson scores
-      updateStreak();
-      setStreak(getStreak());
-      // TODO: Show streak animation
+      if (numExercisesCorrect / NUM_EXERCISES_PER_LESSON >= 0.7) {
+        increaseStreakFreezes();
+      }
+      const updated = updateStreak();
+      if (updated) {
+        const newStreakNum = getStreak();
+        setStreakTitle(newStreakNum);
+        toast(`You increased your streak to ${newStreakNum}!`, "success");
+      }
       setLessonEnded(true);
     }
   }, [exerciseNum]);
@@ -77,6 +88,8 @@ export default function PageHome({setStreak} : PropsPageHome) {
     setProgress(result);
     setResult(null);
     setExerciseNum((k) => k + 1);
+    if (result === ExerciseResult.CORRECT)
+      setNumExerciseCorrect((k) => k + 1);
   }
 
   if (loadError) {
@@ -89,7 +102,7 @@ export default function PageHome({setStreak} : PropsPageHome) {
   else if (loading) {
     return (
       <>
-        <p className="p-loading">Loading...</p> // TODO: style
+        <p className="p-loading">Loading...</p>
       </>
     );
   }
