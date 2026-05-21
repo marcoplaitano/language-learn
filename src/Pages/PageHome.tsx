@@ -92,6 +92,8 @@ export default function PageHome({ setStreakTitle }: PropsPageHome) {
   useEffect(() => {
     if (lessonEnded === false) {
       setExerciseNum(0);
+      setNumExercisesCorrect(0);
+      setNumExercisesSkipped(0);
       setLessonEnded(false);
     }
   }, [lessonEnded]);
@@ -131,7 +133,7 @@ export default function PageHome({ setStreakTitle }: PropsPageHome) {
       <>
         <main>
           <div className="app">
-            <EndOfLesson onDone={setLessonEnded} />
+            <EndOfLesson numExercisesCorrect={numExercisesCorrect} numExercisesSkipped={numExercisesSkipped} onDone={setLessonEnded} />
           </div>
         </main>
       </>

@@ -30,7 +30,6 @@ The user can also add more examples with a form in the "Add data" section of the
 ### Website
 
 + mistakes review
-+ end of lesson messages
 + rewrite in react exercise fill blanks
 + rewrite in react exercise match translation
 + rewrite in react exercise reorder sentence

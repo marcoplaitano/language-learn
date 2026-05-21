@@ -100,30 +100,6 @@ export function levenshtein(a: string, b: string): number {
   return dp[a.length][b.length];
 }
 
-export function pickRandomMessage<T>(list: T[]): T {
-  return list[Math.floor(Math.random() * list.length)];
-}
-
-// Choose which end-of-lesson message to display based on number of failed and skipped exercises.
-export function getEndMessage(
-  messages: any,
-  failed: number,
-  skipped: number,
-  total: number
-): string {
-  const ratioMistake = failed / total;
-  const ratioSkip = skipped / total;
-
-  if (ratioSkip >= 0.5) return pickRandomMessage(messages.skipped_most);
-  if (ratioSkip >= 0.2) return pickRandomMessage(messages.skipped_some);
-  if (ratioMistake === 0) return pickRandomMessage(messages.lesson_perfect);
-  if (ratioMistake <= 0.1) return pickRandomMessage(messages.lesson_excellent);
-  if (ratioMistake <= 0.3) return pickRandomMessage(messages.lesson_great);
-  if (ratioMistake <= 0.5) return pickRandomMessage(messages.lesson_okay);
-  if (ratioMistake <= 0.7) return pickRandomMessage(messages.lesson_poor);
-  else return pickRandomMessage(messages.lesson_terrible);
-}
-
 
 
 //////////////////////////////////////////////////
