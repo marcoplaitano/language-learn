@@ -174,7 +174,7 @@ export function useStreakFreeze(): void {
   decreaseStreakFreezes();
 }
 
-export function initStreak(): { streakNum: number; wasFreezed: boolean } {
+export function initStreak(): boolean {
   const yesterday = new Date();
   yesterday.setDate(yesterday.getDate() - 1);
   const yesterdayStr = yesterday.toISOString().split("T")[0];
@@ -189,5 +189,5 @@ export function initStreak(): { streakNum: number; wasFreezed: boolean } {
       resetStreak();
   }
 
-  return { streakNum: getStreak(), wasFreezed: isStreakFreezed() };
+  return isStreakFreezed();
 }

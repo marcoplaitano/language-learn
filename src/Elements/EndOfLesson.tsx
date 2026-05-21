@@ -2,8 +2,6 @@ import messages from "../data/messages.json";
 
 import { NUM_EXERCISES_PER_LESSON } from "../globals";
 
-import { useState, useEffect } from "react";
-
 
 function pickRandomMessage<T>(list: T[]): T {
   return list[Math.floor(Math.random() * list.length)];

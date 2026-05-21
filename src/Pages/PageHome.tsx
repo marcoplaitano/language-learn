@@ -66,7 +66,7 @@ export default function PageHome({ setStreakTitle }: PropsPageHome) {
   }, [DB_CLIENT]);
 
   useEffect(() => {
-    const { streakNum, wasFreezed } = initStreak();
+    const wasFreezed = initStreak();
     if (wasFreezed)
       toast(`Your streak is frozen!`, "noicon");
     loadData();
@@ -144,8 +144,10 @@ export default function PageHome({ setStreakTitle }: PropsPageHome) {
       <>
         <main>
           <div className="app">
-            {data?.length > 0 && <ExerciseComponent key={exerciseNum} inputData={data} onCheck={setResult} skipped={skipped} />}
-
+            {data && data.length > 0 && (
+                <ExerciseComponent key={exerciseNum} inputData={data} onCheck={setResult} skipped={skipped} />
+              )
+            }
             {result !== null && <ButtonNext status={result} onNext={nextExercise} />}
           </div>
         </main>

@@ -1,6 +1,35 @@
 import '../style/Toast.css';
 
 import { createContext, useContext, useState, useEffect, useRef } from "react";
+import type { ReactNode } from "react";
+
+// ─── types ────────────────────────────────────────────────────────────────────
+
+type ToastFunction = (message: string, type?: string) => void;
+
+interface Toast {
+  id: number;
+  message: string;
+  type: string;
+  duration: number;
+}
+
+interface ToastProviderProps {
+  children: ReactNode;
+  duration?: number;
+}
+
+interface ToastStackProps {
+  toasts: Toast[];
+  onDismiss: (id: number) => void;
+}
+
+interface ToastItemProps {
+  message: string;
+  type: string;
+  duration: number;
+  onDismiss: () => void;
+}
 
 // ─── config ───────────────────────────────────────────────────────────────────
 
@@ -36,17 +65,17 @@ const TOAST_CONFIG = {
 
 // ─── context ──────────────────────────────────────────────────────────────────
 
-const ToastContext = createContext(null);
+const ToastContext = createContext<ToastFunction | null>(null);
 
-export function ToastProvider({ children, duration = 3500 }) {
-  const [toasts, setToasts] = useState([]);
+export function ToastProvider({ children, duration = 3500 }: ToastProviderProps) {
+  const [toasts, setToasts] = useState<Toast[]>([]);
 
-  function toast(message, type = "info") {
+  function toast(message: string, type = "info") {
     const id = Date.now() + Math.random(); // safe for rapid-fire calls
     setToasts((prev) => [...prev, { id, message, type, duration }]);
   }
 
-  function dismiss(id) {
+  function dismiss(id: number) {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   }
 
@@ -67,7 +96,7 @@ export function ToastProvider({ children, duration = 3500 }) {
  * toast("Saved!", "info");
  * toast("Upload failed", "error");
  */
-export function useToast() {
+export function useToast(): ToastFunction {
   const ctx = useContext(ToastContext);
   if (!ctx) throw new Error("useToast must be used inside <ToastProvider>");
   return ctx;
@@ -75,7 +104,7 @@ export function useToast() {
 
 // ─── internals ────────────────────────────────────────────────────────────────
 
-function ToastStack({ toasts, onDismiss }) {
+function ToastStack({ toasts, onDismiss }: ToastStackProps) {
   return (
     <div className="toast-stack" aria-live="polite">
       {toasts.map((t) => (
@@ -85,22 +114,22 @@ function ToastStack({ toasts, onDismiss }) {
   );
 }
 
-function ToastItem({ message, type, duration, onDismiss }) {
+function ToastItem({ message, type, duration, onDismiss }: ToastItemProps) {
   const [visible, setVisible] = useState(false);
-  const timerRef = useRef(null);
-  const cfg = TOAST_CONFIG[type] ?? TOAST_CONFIG.info;
+  const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const cfg = TOAST_CONFIG[type as keyof typeof TOAST_CONFIG] ?? TOAST_CONFIG.info;
 
   useEffect(() => {
     const raf = requestAnimationFrame(() => setVisible(true));
     timerRef.current = setTimeout(handleDismiss, duration);
     return () => {
       cancelAnimationFrame(raf);
-      clearTimeout(timerRef.current);
+      if (timerRef.current) clearTimeout(timerRef.current);
     };
   }, []);
 
   function handleDismiss() {
-    clearTimeout(timerRef.current);
+    if (timerRef.current) clearTimeout(timerRef.current);
     setVisible(false);
     setTimeout(onDismiss, 350); // wait for slide-out before unmounting
   }
