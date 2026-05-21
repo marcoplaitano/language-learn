@@ -13,7 +13,7 @@ main {
   overflow-y: auto;
 }
 @media screen and (min-height:700px) {
-  main {
+  .app {
     margin-top: 6rem;
   }
 }

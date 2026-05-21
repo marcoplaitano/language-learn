@@ -82,7 +82,7 @@ export default function PageHome({ setStreakTitle }: PropsPageHome) {
         if (updated) {
           const newStreakNum = getStreak();
           setStreakTitle(newStreakNum);
-          toast(`You increased your streak to 🔥${newStreakNum} days!`, "noicon");
+          toast(`Streak increased to 🔥${newStreakNum} days!`, "noicon");
         }
       }
       setLessonEnded(true);

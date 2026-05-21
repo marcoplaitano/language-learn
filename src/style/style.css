@@ -10,13 +10,18 @@
   --color-accent: #7287FD;
   --color-green: #40A02B;
   --color-red: #E64553;
-  --color-red-background: #FCE9EA;
   --color-skip-btn-fg: #7287FD;
   --color-skip-btn-bg: #dce0e8;
   --color-streak-overlay-fg: #EFF1F5;
   --color-hr: #DCE0E8;
   --color-placeholder: #9CA0B0;
   --color-footer-hr: #BCC0CC;
+  --color-toast-info-bg: var(--color-background);
+  --color-toast-info-border: var(--color-accent);
+  --color-toast-info-icon: var(--color-accent);
+  --color-toast-error-bg: #FCE9EA;
+  --color-toast-error-border: var(--color-red);
+  --color-toast-error-icon: var(--color-red);
 }
 html.dark {
   --color-background: #1E1E2E;
@@ -27,12 +32,17 @@ html.dark {
   --color-accent: #B4BEFE;
   --color-green: #A6E3A1;
   --color-red: #F38BA8;
-  --color-red-background: #FDE8EE;
   --color-skip-btn-fg: #B4BEFE;
   --color-skip-btn-bg: #313244;
   --color-streak-overlay-fg: #CDD6F4;
   --color-hr: #45475A;
   --color-footer-hr: #45475A;
+  --color-toast-info-bg: var(--color-background);
+  --color-toast-info-border: var(--color-accent);
+  --color-toast-info-icon: var(--color-accent);
+  --color-toast-error-bg: #1E1E2E;
+  --color-toast-error-border: var(--color-red);
+  --color-toast-error-icon: var(--color-red);
 }
 
 
