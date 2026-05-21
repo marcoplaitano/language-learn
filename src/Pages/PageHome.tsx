@@ -37,9 +37,9 @@ export default function PageHome({ setStreakTitle }: PropsPageHome) {
   const exercises = [
     ExerciseTranslation,
     ExerciseMatchPairs,
-    // ExerciseMatchTranslation,
-    // ExerciseFillBlanks,
-    // ExerciseReorderSentence
+    ExerciseMatchTranslation,
+    ExerciseFillBlanks,
+    ExerciseReorderSentence
   ];
 
   // Pick once when the component mounts, re-pick when exerciseNum changes

@@ -12,6 +12,8 @@ export const TODAY_DATE = new Date().toISOString().split('T')[0]; // "YYYY-MM-DD
 
 export const NUM_EXERCISES_PER_LESSON = 10;
 
+export const BLANK_STR = "______";
+
 
 
 //////////////////////////////////////////////////

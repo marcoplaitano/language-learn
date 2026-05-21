@@ -10,9 +10,7 @@ The website is available at https://turkingo.netlify.app.
 ## Main features
 
 + 10 exercises per lesson
-+ Skip exercise button
-+ Mistakes revision
-+ Lessons scoreboard
++ Skip button
 + Daily streak counter
 + Streak Freeze
 
@@ -30,11 +28,9 @@ The user can also add more examples with a form in the "Add data" section of the
 ### Website
 
 + mistakes review
-+ rewrite in react exercise fill blanks
-+ rewrite in react exercise match translation
-+ rewrite in react exercise reorder sentence
 + style
 + fix react warnings
++ comments
 
 ### Exercises
 

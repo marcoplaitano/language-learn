@@ -27,12 +27,6 @@ input[type="text"]:focus {
 }
 
 
-.exercise-hint {
-  text-align: center;
-  margin: 1rem 0 2rem;
-}
-
-
 /* ***** BUTTONS ***** */
 main button {
   font-size: inherit;
@@ -60,6 +54,10 @@ main button:disabled:hover {
 .exercise-answers {
   flex-wrap: wrap;
   justify-content: center;
+}
+.exercise-answers.flexed {
+  display: flex;
+  gap: 8px;
 }
 .btn-guess,
 .btn-match {
@@ -116,4 +114,13 @@ main button:disabled:hover {
   margin: 12px auto;
   padding: 6px 0;
   font-weight: bold;
+}
+
+
+/* ***** HINT ***** */
+.exercise-hint {
+  text-align: center;
+  margin: 1rem 0 2rem;
+  margin: 12px auto;
+  padding: 6px 0;
 }
